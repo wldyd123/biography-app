@@ -11,7 +11,7 @@ function RootStack() {
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
-        options={{headerShown: false}}
+        options={{headerTitleAlign: 'center'}}
       />
       <Stack.Screen name="MainTab" component={MainTab} />
     </Stack.Navigator>

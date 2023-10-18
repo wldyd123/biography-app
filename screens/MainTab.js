@@ -1,26 +1,24 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StyleSheet, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 function MainTab() {
-    <View style = {styles.block}>
+  <View style={styles.block}>
     <Tab.Navigator initialRouteName="Home">
-          <Tab.Screen name="Home" component={HomeScreen}/>
-          <Tab.Screen name="Notification" component={NotificationScreen}/>
-          <Tab.Screen name="Mypage" component={MyPage}/>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Notification" component={NotificationScreen} />
+      <Tab.Screen name="Mypage" component={MyPage} />
     </Tab.Navigator>
-    </View>
-
-    
+  </View>;
 }
 
 const styles = StyleSheet.create({
-    block: {
-      flex: 1,
-      Index: 0,
-    },
-  });
-  
+  block: {
+    flex: 1,
+    Index: 0,
+  },
+});
+
 export default MainTab;
