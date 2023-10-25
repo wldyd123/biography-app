@@ -1,16 +1,21 @@
 import React from 'react';
-import {StyleSheet, View, Pressable, Text} from 'react-native';
+import {StyleSheet, View, Pressable, Text, Platform} from 'react-native';
 
 function CustomButton({onPress, title, hasMarginBottom, theme}) {
   const isPrimary = theme === 'primary';
 
   return (
-    <View
-      style={[styles.block, styles.overflow, hasMarginBottom && styles.margin]}>
+    <View style={[styles.block, hasMarginBottom && styles.margin]}>
       <Pressable
         onPress={onPress}
-        style={[styles.wrapper, isPrimary && styles.primaryWrapper]}
-        android_ripple={{color: isPrimary ? '#ffffff' : '#FDD3D5'}}>
+        style={({pressed}) => [
+          styles.wrapper,
+          isPrimary && styles.primaryWrapper,
+          Platform.OS === 'ios' && pressed && {opacity: 0.5},
+        ]}
+        android_ripple={{
+          color: isPrimary ? '#ffffff' : '#6200ee',
+        }}>
         <Text
           style={[
             styles.text,
@@ -22,9 +27,11 @@ function CustomButton({onPress, title, hasMarginBottom, theme}) {
     </View>
   );
 }
+
 CustomButton.defaultProps = {
   theme: 'primary',
 };
+
 const styles = StyleSheet.create({
   overflow: {
     borderRadius: 4,
@@ -35,18 +42,21 @@ const styles = StyleSheet.create({
     height: 48,
     alignItems: 'center',
     justifyContent: 'center',
+    // backgroundColor 제거
   },
   primaryWrapper: {
-    backgroundColor: '#FDD3D5',
+    backgroundColor: '#6200ee',
   },
   text: {
     fontWeight: 'bold',
     fontSize: 14,
     color: 'white',
   },
-  primaryText: {color: 'white'},
+  primaryText: {
+    color: 'white',
+  },
   secondaryText: {
-    color: '#FDD3D5',
+    color: '#6200ee',
   },
   margin: {
     marginBottom: 8,
