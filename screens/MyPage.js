@@ -5,16 +5,16 @@ import UserProfile from '../components/UserProfile';
 
 function MyPage() {
   return (
-    <View style= {styles.block}>
-      <UserProfile/>
-      <UserPosts/>
+    <View style={styles.block}>
+      <UserProfile />
+      <UserPosts />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
-    flex : 1,
+    flex: 1,
   },
 });
 

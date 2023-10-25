@@ -2,6 +2,9 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StyleSheet, View} from 'react-native';
+import HomeScreen from './HomeScreen';
+import NotificationScreen from './NotificationScreen';
+import MyPage from './MyPage';
 
 const Tab = createBottomTabNavigator();
 function MainTab() {
