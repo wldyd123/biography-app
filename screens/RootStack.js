@@ -2,12 +2,14 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignInScreen from './SignInScreen';
 import MainTab from './MainTab';
+import WelcomeScreen from './WelcomeScreen';
 
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
