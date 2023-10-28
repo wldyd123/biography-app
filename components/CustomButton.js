@@ -14,7 +14,7 @@ function CustomButton({onPress, title, hasMarginBottom, theme}) {
           Platform.OS === 'ios' && pressed && {opacity: 0.5},
         ]}
         android_ripple={{
-          color: isPrimary ? '#ffffff' : '#6200ee',
+          color: isPrimary ? '#ffffff' : '#FDD3D5',
         }}>
         <Text
           style={[
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     // backgroundColor 제거
   },
   primaryWrapper: {
-    backgroundColor: '#6200ee',
+    backgroundColor: '#FDD3D5',
   },
   text: {
     fontWeight: 'bold',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   secondaryText: {
-    color: '#6200ee',
+    color: '#FDD3D5',
   },
   margin: {
     marginBottom: 8,
