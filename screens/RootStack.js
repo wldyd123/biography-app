@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignInScreen from './SignInScreen';
 import MainTab from './MainTab';
 import WelcomeScreen from './WelcomeScreen';
+import WebviewScreen from './WebviewScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ function RootStack() {
         options={{headerTitleAlign: 'center'}}
       />
       <Stack.Screen name="MainTab" component={MainTab} />
+      <Stack.Screen name="WebView" component={WebviewScreen} />
     </Stack.Navigator>
   );
 }

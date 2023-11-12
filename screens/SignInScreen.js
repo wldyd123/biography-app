@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import SignButtons from '../components/SignButtons';
 import SignInForm from '../components/SignForm';
+import KakaoLogin from '../components/KakaoLogin';
 import {signIn, signUp} from '../lib/auth';
 
 function SignInScreen({navigation, route}) {
@@ -74,6 +75,11 @@ function SignInScreen({navigation, route}) {
             onSubmit={onSubmit}
             loading={loading}
           />
+          <KakaoLogin
+            onPress={() => {
+              navigation.navigate('WebView');
+            }}
+          />
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
@@ -89,6 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
   },
   text: {
     fontSize: 32,
