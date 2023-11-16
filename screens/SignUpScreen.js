@@ -9,11 +9,7 @@ import {
   View,
   SafeAreaView,
 } from 'react-native';
-
-import SignButtons from '../components/SignButtons';
-import SignInForm from '../components/SignForm';
-import KakaoLogin from '../components/KakaoLogin';
-import {signIn, signUp} from '../lib/auth';
+import BorderedInput from '../components/BorderedInput';
 
 function SignUpScreen({navigation, route}) {
   const [form, setForm] = useState({
@@ -30,7 +26,12 @@ function SignUpScreen({navigation, route}) {
     <KeyboardAvoidingView
       style={styles.KeyboardAvoidingView}
       behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView styles={styles.fullscreen} />
+      <SafeAreaView styles={styles.fullscreen}>
+        <BorderedInput placeholder="이름" />
+        <BorderedInput placeholder="전화번호 " />
+        <BorderedInput placeholder="생년월일 예: 19920708" />
+        <BorderedInput placeholder="닉네임" />
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 }
@@ -46,3 +47,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
+
+export default SignUpScreen;

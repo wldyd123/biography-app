@@ -4,6 +4,7 @@ import SignInScreen from './SignInScreen';
 import MainTab from './MainTab';
 import WelcomeScreen from './WelcomeScreen';
 import WebviewScreen from './WebviewScreen';
+import SignUpScreen from './SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ function RootStack() {
       />
       <Stack.Screen name="MainTab" component={MainTab} />
       <Stack.Screen name="WebView" component={WebviewScreen} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
     </Stack.Navigator>
   );
 }

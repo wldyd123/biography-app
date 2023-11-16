@@ -2,14 +2,10 @@ import React, {useRef} from 'react';
 import {Text, Alert, StyleSheet} from 'react-native';
 import BorderedInput from './BorderedInput';
 import CustomButton from './CustomButton';
+import {useNavigation} from '@react-navigation/native';
 
-function SignForm({
-  isSignUp,
-  onSubmit,
-  form,
-  createChangeTextHandler,
-  navigation,
-}) {
+function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
+  const navigation = useNavigation();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
@@ -24,6 +20,7 @@ function SignForm({
       Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
     }
   };
+
   return (
     <>
       <BorderedInput
@@ -88,12 +85,9 @@ function SignForm({
             size="full"
             onPress={() => {
               passwordCheck(password);
+              navigation.navigate('SignUp');
             }}
           />
-          {/* <BorderedInput placeholder="이름" />
-          <BorderedInput placeholder="전화번호 " />
-          <BorderedInput placeholder="생년월일 예: 19920708" />
-          <BorderedInput placeholder="닉네임" /> */}
         </>
       )}
     </>
