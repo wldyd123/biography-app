@@ -6,9 +6,6 @@ import {useNavigation} from '@react-navigation/native';
 function SignButtons({isSignUp, onSubmit, loading}) {
   const navigation = useNavigation();
 
-  const primaryTitle = isSignUp ? '회원가입' : '로그인';
-  const secondaryTitle = isSignUp ? '로그인' : '회원가입';
-
   const onSecondaryButtonPress = () => {
     if (isSignUp) {
       navigation.goBack();
@@ -27,11 +24,19 @@ function SignButtons({isSignUp, onSubmit, loading}) {
 
   return (
     <View style={styles.buttons}>
-      <CustomButton title={primaryTitle} hasMarginBottom onPress={onSubmit} />
       <CustomButton
-        title={secondaryTitle}
+        title={'로그인'}
+        hasMarginBottom
+        onPress={onSubmit}
+        size="full"
+      />
+      <CustomButton
+        title={'회원가입'}
         theme="secondary"
-        onPress={onSecondaryButtonPress}
+        onPress={() => {
+          navigation.push('SignIn', {isSignUp: true});
+        }}
+        size="full"
       />
     </View>
   );

@@ -1,15 +1,18 @@
 import React from 'react';
 import {StyleSheet, View, Pressable, Text, Platform} from 'react-native';
 
-function CustomButton({onPress, title, hasMarginBottom, theme}) {
+function CustomButton({onPress, title, hasMarginBottom, theme, size}) {
   const isPrimary = theme === 'primary';
+  const isFullButton = size === 'full';
 
   return (
-    <View style={[styles.block, hasMarginBottom && styles.margin]}>
+    <View
+      style={[!isFullButton && styles.block, hasMarginBottom && styles.margin]}>
       <Pressable
         onPress={onPress}
         style={({pressed}) => [
-          styles.wrapper,
+          styles.fullWrapper,
+          !isFullButton && styles.wrapper,
           isPrimary && styles.primaryWrapper,
           Platform.OS === 'ios' && pressed && {opacity: 0.5},
         ]}
@@ -33,16 +36,24 @@ CustomButton.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  block: {
+    alignItems: 'flex-end',
+  },
   overflow: {
     borderRadius: 4,
     overflow: 'hidden',
   },
-  wrapper: {
+  fullWrapper: {
     borderRadius: 4,
     height: 48,
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor 제거
+  },
+  wrapper: {
+    width: 70,
+    height: 30,
+    margin: 8,
   },
   primaryWrapper: {
     backgroundColor: '#FDD3D5',
@@ -59,7 +70,7 @@ const styles = StyleSheet.create({
     color: '#FDD3D5',
   },
   margin: {
-    marginBottom: 8,
+    marginBottom: 16,
   },
 });
 

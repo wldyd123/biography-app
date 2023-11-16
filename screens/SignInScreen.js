@@ -20,6 +20,7 @@ function SignInScreen({navigation, route}) {
     email: '',
     password: '',
     confirmPassword: '',
+    authNumber: '',
   });
   const [loading, setLoading] = useState();
 
@@ -31,11 +32,6 @@ function SignInScreen({navigation, route}) {
     Keyboard.dismiss();
 
     const {email, password, confirmPassword} = form;
-
-    if (isSignUp && password !== confirmPassword) {
-      Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
-      return;
-    }
 
     setLoading(true);
     const info = {email, password};
@@ -62,7 +58,13 @@ function SignInScreen({navigation, route}) {
       style={styles.keyboardAvoidingView}
       behavior={Platform.select({ios: 'padding'})}>
       <SafeAreaView style={styles.fullscreen}>
-        <Text style={styles.text}>SignInScreen</Text>
+        {!isSignUp ? (
+          <Text style={styles.text}>SignInScreen</Text>
+        ) : (
+          <Text style={styles.instruction}>
+            아래 칸에 해당 정보를 기입해주세요.
+          </Text>
+        )}
         <View style={styles.form}>
           <SignInForm
             isSignUp={isSignUp}
@@ -70,16 +72,20 @@ function SignInScreen({navigation, route}) {
             form={form}
             createChangeTextHandler={createChangeTextHandler}
           />
-          <SignButtons
-            isSignUp={isSignUp}
-            onSubmit={onSubmit}
-            loading={loading}
-          />
-          <KakaoLogin
-            onPress={() => {
-              navigation.navigate('WebView');
-            }}
-          />
+          {!isSignUp && (
+            <>
+              <SignButtons
+                isSignUp={isSignUp}
+                onSubmit={onSubmit}
+                loading={loading}
+              />
+              <KakaoLogin
+                onPress={() => {
+                  navigation.navigate('WebView');
+                }}
+              />
+            </>
+          )}
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
@@ -100,6 +106,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 32,
     fontWeight: 'bold',
+  },
+  instruction: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
   },
   form: {
     marginTop: 64,

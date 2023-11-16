@@ -1,14 +1,33 @@
 import React, {useRef} from 'react';
+import {Text, Alert, StyleSheet} from 'react-native';
 import BorderedInput from './BorderedInput';
+import CustomButton from './CustomButton';
 
-function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
+function SignForm({
+  isSignUp,
+  onSubmit,
+  form,
+  createChangeTextHandler,
+  navigation,
+}) {
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
+  const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+
+  const {email, password, confirmPassword, authNumber} = form;
+
+  const passwordCheck = password => {
+    if (password.match(passwordRegEx) === null) {
+      Alert.alert('실패', '유효하지 않은 비밀번호 입니다.');
+    } else if (isSignUp && password !== confirmPassword) {
+      Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
+    }
+  };
   return (
     <>
       <BorderedInput
-        hasMarginBottom
+        hasMarginBottom={!isSignUp}
         placeholder="이메일"
         value={form.email}
         onChangeText={createChangeTextHandler('email')}
@@ -19,10 +38,24 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
         returnKeyType="next"
         onSubmitEditing={() => passwordRef.current.focus()}
       />
+
+      {isSignUp && (
+        <>
+          <CustomButton title="인증하기" />
+          <BorderedInput
+            placeholder="인증번호"
+            value={form.authNumber}
+            returnKeyType="done"
+            onChangeText={createChangeTextHandler('authNumber')}
+          />
+          <CustomButton title="확인" />
+        </>
+      )}
+
       <BorderedInput
         placeholder="비밀번호"
         secureTextEntry
-        hasMarginBottom={isSignUp}
+        // hasMarginBottom={isSignUp}
         value={form.password}
         onChangeText={createChangeTextHandler('password')}
         ref={passwordRef}
@@ -36,18 +69,40 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
         }}
       />
       {isSignUp && (
-        <BorderedInput
-          placeholder="비밀번호 확인"
-          secureTextEntry
-          value={form.confirmPassword}
-          onChangeText={createChangeTextHandler('confirmPassword')}
-          ref={confirmPasswordRef}
-          returnKeyType="done"
-          onSubmitEditing={onSubmit}
-        />
+        <>
+          <Text style={styles.text}>
+            영문/숫자/특수문자 중 2개 이상 조합 8자 이상
+          </Text>
+          <BorderedInput
+            hasMarginBottom
+            placeholder="비밀번호 확인"
+            secureTextEntry
+            value={form.confirmPassword}
+            onChangeText={createChangeTextHandler('confirmPassword')}
+            ref={confirmPasswordRef}
+            returnKeyType="done"
+            // onSubmitEditing={onSubmit}
+          />
+          <CustomButton
+            title={'다음'}
+            size="full"
+            onPress={() => {
+              passwordCheck(password);
+            }}
+          />
+          {/* <BorderedInput placeholder="이름" />
+          <BorderedInput placeholder="전화번호 " />
+          <BorderedInput placeholder="생년월일 예: 19920708" />
+          <BorderedInput placeholder="닉네임" /> */}
+        </>
       )}
     </>
   );
 }
 
+const styles = StyleSheet.create({
+  text: {
+    margin: 8,
+  },
+});
 export default SignForm;

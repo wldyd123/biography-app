@@ -15,6 +15,7 @@ function WelcomeScreen({navigation, route}) {
           theme="primary"
           title="시작하기"
           onPress={() => navigation.navigate('SignIn')}
+          size="full"
         />
       </View>
     </>
