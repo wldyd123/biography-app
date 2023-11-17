@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Alert,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -10,13 +8,14 @@ import {
   SafeAreaView,
 } from 'react-native';
 import BorderedInput from '../components/BorderedInput';
+import CustomButton from '../components/CustomButton';
 
 function SignUpScreen({navigation, route}) {
   const [form, setForm] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    authNumber: '',
+    userName: '',
+    telNumber: '',
+    birthday: '',
+    nickname: '',
   });
 
   const createChangeTextHandler = name => value => {
@@ -24,13 +23,36 @@ function SignUpScreen({navigation, route}) {
   };
   return (
     <KeyboardAvoidingView
-      style={styles.KeyboardAvoidingView}
+      style={styles.keyboardAvoidingView}
       behavior={Platform.select({ios: 'padding'})}>
-      <SafeAreaView styles={styles.fullscreen}>
-        <BorderedInput placeholder="이름" />
-        <BorderedInput placeholder="전화번호 " />
-        <BorderedInput placeholder="생년월일 예: 19920708" />
-        <BorderedInput placeholder="닉네임" />
+      <SafeAreaView style={styles.fullscreen}>
+        <Text style={styles.instruction}>
+          아래 칸에 해당 정보를 기입해주세요.
+        </Text>
+        <View style={styles.formArea}>
+          <BorderedInput
+            hasMarginBottom
+            placeholder="이름"
+            autoCorrect={false}
+            returnKeyType="next"
+          />
+          <BorderedInput
+            hasMarginBottom
+            autoCorrect={false}
+            placeholder="전화번호 "
+          />
+          <BorderedInput
+            hasMarginBottom
+            autoCorrect={false}
+            placeholder="생년월일 예: 19920708"
+          />
+          <BorderedInput
+            hasMarginBottom
+            autoCorrect={false}
+            placeholder="닉네임"
+          />
+          <CustomButton title="다음" />
+        </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
@@ -39,9 +61,16 @@ function SignUpScreen({navigation, route}) {
 const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  instruction: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
   },
   fullscreen: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
