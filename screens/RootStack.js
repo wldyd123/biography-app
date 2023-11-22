@@ -5,6 +5,7 @@ import MainTab from './MainTab';
 import WelcomeScreen from './WelcomeScreen';
 import WebviewScreen from './WebviewScreen';
 import SignUpScreen from './SignUpScreen';
+import SetupProfileScreen from './SetupProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,11 @@ function RootStack() {
       <Stack.Screen name="MainTab" component={MainTab} />
       <Stack.Screen name="WebView" component={WebviewScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen
+        name="SetupProfile"
+        component={SetupProfileScreen}
+        options={{headerTitleAlign: 'center'}}
+      />
     </Stack.Navigator>
   );
 }
