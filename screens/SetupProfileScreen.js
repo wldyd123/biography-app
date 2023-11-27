@@ -18,7 +18,10 @@ function SetupProfileScreen({navigation, route}) {
       <SafeAreaView style={styles.fullscreen}>
         <View style={styles.circle} />
         <View style={styles.form}>
-          <BorderedInput placeholder="한 줄 소개 작성 (선택)" />
+          <BorderedInput
+            placeholder="한 줄 소개 작성 (선택)"
+            profile={styles.profile}
+          />
           <CustomButton title="다음" />
         </View>
       </SafeAreaView>
@@ -32,15 +35,21 @@ const styles = StyleSheet.create({
   },
   fullscreen: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
+    padding: 64,
   },
+
+  form: {justifyContent: 'center'},
   circle: {
-    padding: '32',
+    // flex: 1,
+    marginBottom: 80,
     backgroundColor: '#cdcdcd',
     borderRadius: 64,
     width: 128,
     height: 128,
   },
+  profile: {height: 128, width: },
 });
 
 export default SetupProfileScreen;

@@ -3,6 +3,7 @@ import {Text, Alert, StyleSheet} from 'react-native';
 import BorderedInput from './BorderedInput';
 import CustomButton from './CustomButton';
 import {useNavigation} from '@react-navigation/native';
+import {sendMailAuth} from '../lib/auth';
 
 function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
   const navigation = useNavigation();
@@ -38,7 +39,12 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
 
       {isSignUp && (
         <>
-          <CustomButton title="인증하기" />
+          <CustomButton
+            title="인증하기"
+            onPress={() => {
+              sendMailAuth(form.email);
+            }}
+          />
           <BorderedInput
             placeholder="인증번호"
             value={form.authNumber}
