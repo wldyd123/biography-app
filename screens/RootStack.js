@@ -6,12 +6,19 @@ import WelcomeScreen from './WelcomeScreen';
 import WebviewScreen from './WebviewScreen';
 import SignUpScreen from './SignUpScreen';
 import SetupProfileScreen from './SetupProfileScreen';
+import WriteScreen from './WriteScreen';
+import PageScreen from './PageScreen';
 
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="Write"
+        options={{title: '글쓰기'}}
+        component={WriteScreen}
+      />
       <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
@@ -29,6 +36,11 @@ function RootStack() {
         name="SetupProfile"
         component={SetupProfileScreen}
         options={{headerTitleAlign: 'center'}}
+      />
+      <Stack.Screen
+        name="Page"
+        options={{title: '페이지'}}
+        component={PageScreen}
       />
     </Stack.Navigator>
   );
