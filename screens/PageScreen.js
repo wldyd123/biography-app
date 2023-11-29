@@ -1,8 +1,20 @@
 import React from 'react';
-import {View} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import WriteEditor from '../components/WriteEditor';
 
 function PageScreen() {
-  return <View></View>;
+  return (
+    <SafeAreaView style={styles.block}>
+      <WriteEditor />
+    </SafeAreaView>
+  );
 }
+
+const styles = StyleSheet.create({
+  block: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+});
 
 export default PageScreen;

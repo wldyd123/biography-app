@@ -39,7 +39,7 @@ function RootStack() {
       />
       <Stack.Screen
         name="Page"
-        options={{title: '페이지'}}
+        options={{title: '페이지', headerShown: false}}
         component={PageScreen}
       />
     </Stack.Navigator>
