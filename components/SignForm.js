@@ -91,7 +91,7 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
             size="full"
             onPress={() => {
               passwordCheck(password);
-              navigation.navigate('SignUp', {email: email});
+              navigation.navigate('SignUp', {email: email, password: password});
             }}
           />
         </>
