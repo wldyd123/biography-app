@@ -36,7 +36,7 @@ function SetupProfileScreen({navigation, route}) {
             title="완료"
             onPress={() => {
               setUserOneliner(oneliner);
-              navigation.navigate('');
+              navigation.navigate('MainTab');
             }}
           />
         </View>
