@@ -1,20 +1,40 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StyleSheet, View} from 'react-native';
 import HomeScreen from './HomeScreen';
 import NotificationScreen from './NotificationScreen';
 import MyPage from './MyPage';
+import IconRenderer from '../components/Icon';
 
 const Tab = createBottomTabNavigator();
-function MainTab() {
-  <View style={styles.block}>
-    <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Notification" component={NotificationScreen} />
-      <Tab.Screen name="Mypage" component={MyPage} />
-    </Tab.Navigator>
-  </View>;
+function MainTab({navigation}) {
+  return (
+    <View style={styles.block}>
+      <Tab.Navigator initialRouteName="Mypage">
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: '홈',
+          }}
+        />
+        <Tab.Screen
+          name="Notification"
+          component={NotificationScreen}
+          options={{
+            title: '알림',
+          }}
+        />
+        <Tab.Screen
+          name="Mypage"
+          component={MyPage}
+          options={{
+            title: '기록들',
+          }}
+        />
+      </Tab.Navigator>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
