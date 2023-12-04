@@ -10,11 +10,12 @@ function WelcomeScreen({navigation, route}) {
           질문을 통해 나의 삶을 정리해보는 자서전 커뮤니티 '가벼운 자서전'
         </Text>
       </View>
-      <View style={styles.button}>
+      <View style={styles.buttonContainer}>
         <CustomButton
           theme="primary"
           title="시작하기"
           onPress={() => navigation.navigate('SignIn')}
+          style={styles.button}
           size="full"
         />
       </View>
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#505050',
   },
-  button: {
+  buttonContainer: {
     flex: 0.5,
     // width: '50%',
     paddingHorizontal: 16,
