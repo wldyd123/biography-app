@@ -26,12 +26,13 @@ function SignUpScreen({navigation, route}) {
   const onSubmit = () => {
     createUser({
       id: route.params.email,
+      password: route.params.password,
       userName: form.userName,
       telNumber: form.telNumber,
       birthday: form.birthday,
       nickname: form.nickname,
     });
-    navigation.navigate('SetupProfile');
+    navigation.navigate('SetupProfile', {id: route.params.email});
   };
   return (
     <KeyboardAvoidingView
