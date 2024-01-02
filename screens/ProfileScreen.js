@@ -6,11 +6,11 @@ import {
   Text,
   View,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {Color, Border, FontSize, FontFamily} from '../GlobalStyles';
 import SettingHeader from '../components/SettingHeader';
 import Icon from 'react-native-vector-icons/Feather';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 function ProfileScreen({navigation}) {
   const Menu = props => {
@@ -21,56 +21,57 @@ function ProfileScreen({navigation}) {
     );
   };
   return (
-    //전체블럭과 헤더블럭
-    <View style={styles.block}>
-      {/*헤더블럭*/}
-      <View style={styles.headerBlock}>
-        <SettingHeader title="프로필 관리" />
-        {/*변경하기버튼*/}
-        <View style={styles.btnWrapper}>
-          <View style={styles.changeBtn}>
-            <Pressable>
-              <Text>변경하기</Text>
-            </Pressable>
-          </View>
-        </View>
-        {/*변경하기 버튼 블럭*/}
-      </View>
-      {/*헤더블럭*/}
-      <View style={styles.profileBlock}>
-        <View style={styles.imageBlock}>
-          <Menu title={'이미지'} />
-          {/*그 뭐냐, icon은 closed tag즉 view같은 걸로 감싸줘야 함다...*/}
-          <View style={{alignItems: 'center', justifyContent: 'center'}}>
-            <View style={styles.pictureBlock}>
-              <Icon name="user" color="black" size={70} />
-            </View>
-            <View style={styles.twoBtn}>
-              <Pressable style={styles.imageBtn}>
-                <Text style={styles.btnText}>등록</Text>
-              </Pressable>
-              <Pressable style={styles.imageBtn}>
-                <Text style={styles.btnText}>삭제</Text>
+    <KeyboardAwareScrollView>
+      <View style={styles.block}>
+        {/*헤더블럭*/}
+        <View style={styles.headerBlock}>
+          <SettingHeader title="프로필 관리" />
+          {/*변경하기버튼*/}
+          <View style={styles.btnWrapper}>
+            <View style={styles.changeBtn}>
+              <Pressable>
+                <Text>변경하기</Text>
               </Pressable>
             </View>
           </View>
+          {/*변경하기 버튼 블럭*/}
         </View>
-        <View style={styles.nameBlock}>
-          <Menu title={'닉네임'} />
-          <View>
-            <TextInput style={{borderBottomWidth: 1, marginHorizontal: 10}} />
+        {/*헤더블럭*/}
+        <View style={styles.profileBlock}>
+          <View style={styles.imageBlock}>
+            <Menu title={'이미지'} />
+            {/*그 뭐냐, icon은 closed tag즉 view같은 걸로 감싸줘야 함다...*/}
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <View style={styles.pictureBlock}>
+                <Icon name="user" color="black" size={70} />
+              </View>
+              <View style={styles.twoBtn}>
+                <Pressable style={styles.imageBtn}>
+                  <Text style={styles.btnText}>등록</Text>
+                </Pressable>
+                <Pressable style={styles.imageBtn}>
+                  <Text style={styles.btnText}>삭제</Text>
+                </Pressable>
+              </View>
+            </View>
           </View>
-        </View>
-        <View style={styles.introduceBlock}>
-          <Menu title={'한줄 소개'} />
-          <View>
-            <TextInput
-              style={{borderWidth: 1, borderRadius: 15, marginTop: 10}}
-            />
+          <View style={styles.nameBlock}>
+            <Menu title={'닉네임'} />
+            <View>
+              <TextInput style={{borderBottomWidth: 1, marginHorizontal: 10}} />
+            </View>
+          </View>
+          <View style={styles.introduceBlock}>
+            <Menu title={'한줄 소개'} />
+            <View>
+              <TextInput
+                style={{borderWidth: 1, borderRadius: 15, marginTop: 10}}
+              />
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 export default ProfileScreen;

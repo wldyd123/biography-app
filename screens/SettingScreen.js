@@ -32,7 +32,7 @@ function SettingScreen({navigation}) {
           </Pressable>
         </View>
         <View style={styles.menu}>
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate('Information')}>
             <Text style={styles.menuText}>내정보관리</Text>
           </Pressable>
         </View>
