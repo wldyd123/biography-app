@@ -22,8 +22,10 @@ function SetupProfileScreen({navigation, route}) {
       style={styles.keyboardAvoidingView}
       behavior={Platform.select({ios: 'padding'})}>
       <SafeAreaView style={styles.fullscreen}>
-        <Text style={styles.imageUpload}>이미지 등록 (선택)</Text>
-        <View style={styles.circle} />
+        <View style={styles.container}>
+          <Text style={styles.imageUpload}>이미지 등록 (선택)</Text>
+          <View style={styles.circle} />
+        </View>
         <View style={styles.form}>
           <BorderedInput
             placeholder="한 줄 소개 작성 (선택)"
@@ -46,28 +48,18 @@ function SetupProfileScreen({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
-    // flex: 1,
-  },
-  fullscreen: {
-    // flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 64,
-  },
-  imageUpload: {
-    padding: 20,
-  },
+  keyboardAvoidingView: {flex: 1},
+  fullscreen: {flex: 1},
+  container: {flex: 1, alignSelf: 'center', justifyContent: 'flex-end'},
+  imageUpload: {marginBottom: 20},
   circle: {
-    // flex: 1,
-    marginBottom: 80,
     backgroundColor: '#cdcdcd',
     borderRadius: 64,
     width: 128,
     height: 128,
   },
-  form: {justifyContent: 'center'},
-  profile: {height: 128, width: 128},
+  form: {flex: 1, margin: 50, justifyContent: 'flex-start'},
+  profile: {marginBottom: 5, height: 128},
 });
 
 export default SetupProfileScreen;
