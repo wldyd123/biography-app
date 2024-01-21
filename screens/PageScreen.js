@@ -1,6 +1,5 @@
 import React from 'react';
 import {SafeAreaView, TextInput, StyleSheet, View, Text} from 'react-native';
-import WriteEditor from '../components/WriteEditor';
 import WriteHeader from '../components/WriteHeader';
 
 function Question(props) {
@@ -13,14 +12,11 @@ function Question(props) {
 
 function PageScreen({route, navigation, title, body}) {
   const {question} = route.params;
-  const SeparatorView = () => {
-    return <View style={styles.listItemSeparatorStyle} />;
-  };
 
   return (
     <SafeAreaView style={styles.block}>
       <WriteHeader />
-      <SeparatorView />
+      <View style={styles.listItemSeparatorStyle} />
       <View style={styles.block}>
         <Question ask={question} />
 
@@ -67,11 +63,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     color: '#263238',
     flex: 4,
-  },
-  listItemSeparatorStyle: {
-    height: 0.8,
-    width: '100%',
-    backgroundColor: '#c8c8c8',
   },
   question: {
     flex: 1,

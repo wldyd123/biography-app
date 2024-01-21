@@ -6,13 +6,13 @@ import {useNavigation} from '@react-navigation/native';
 function SignButtons({isSignUp, onSubmit, loading}) {
   const navigation = useNavigation();
 
-  const onSecondaryButtonPress = () => {
-    if (isSignUp) {
-      navigation.goBack();
-    } else {
-      navigation.push('SignIn', {isSignUp: true});
-    }
-  };
+  // const onSecondaryButtonPress = () => {
+  //   if (isSignUp) {
+  //     navigation.goBack();
+  //   } else {
+  //     navigation.push('SignIn', {isSignUp: true});
+  //   }
+  // };
 
   if (loading) {
     return (

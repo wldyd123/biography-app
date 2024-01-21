@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
-
+import {useUserContext} from '../contexts/UserContext';
 function UserProfile() {
   const userName = 'Benseo';
   const userPresentation = '하루하루 채워가는 삶을 사는 벤세오입니다.';

@@ -3,7 +3,7 @@ import {Text, Alert, StyleSheet} from 'react-native';
 import BorderedInput from './BorderedInput';
 import CustomButton from './CustomButton';
 import {useNavigation} from '@react-navigation/native';
-import {sendMailAuth} from '../lib/auth';
+import {sendMailAuth, signUp} from '../lib/auth';
 
 function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
   const navigation = useNavigation();
@@ -14,11 +14,15 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
 
   const {email, password, confirmPassword, authNumber} = form;
 
-  const passwordCheck = password => {
+  const isPasswordOk = password => {
     if (password.match(passwordRegEx) === null) {
       Alert.alert('실패', '유효하지 않은 비밀번호 입니다.');
+      return false;
     } else if (isSignUp && password !== confirmPassword) {
       Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
+      return false;
+    } else {
+      return true;
     }
   };
 
@@ -89,9 +93,18 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
           <CustomButton
             title={'다음'}
             size="full"
-            onPress={() => {
-              passwordCheck(password);
-              navigation.navigate('SignUp', {email: email, password: password});
+            onPress={async () => {
+              if (isPasswordOk(password)) {
+                try {
+                  await signUp({email, password});
+                  navigation.navigate('SignUp', {
+                    email: email,
+                    password: password,
+                  });
+                } catch (e) {
+                  Alert.alert('실패', e.code);
+                }
+              }
             }}
           />
         </>

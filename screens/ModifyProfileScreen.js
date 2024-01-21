@@ -1,25 +1,18 @@
-import * as React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Pressable,
-  Text,
-  View,
-  TextInput,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {Color, Border, FontSize, FontFamily} from '../GlobalStyles';
+import React from 'react';
+import {StyleSheet, Pressable, Text, View, TextInput} from 'react-native';
+
 import SettingHeader from '../components/SettingHeader';
 import Icon from 'react-native-vector-icons/Feather';
 
-function ProfileScreen({navigation}) {
-  const Menu = props => {
-    return (
-      <View style={styles.menuBlock}>
-        <Text style={styles.menuText}>{props.title}</Text>
-      </View>
-    );
-  };
+const Menu = props => {
+  return (
+    <View style={styles.menuBlock}>
+      <Text style={styles.menuText}>{props.title}</Text>
+    </View>
+  );
+};
+
+function ModifyProfileScreen({navigation}) {
   return (
     //전체블럭과 헤더블럭
     <View style={styles.block}>
@@ -73,7 +66,7 @@ function ProfileScreen({navigation}) {
     </View>
   );
 }
-export default ProfileScreen;
+export default ModifyProfileScreen;
 
 const styles = StyleSheet.create({
   block: {

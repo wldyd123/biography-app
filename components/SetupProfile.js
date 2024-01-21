@@ -1,12 +1,29 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, Pressable, StyleSheet, View} from 'react-native';
 import {signOut} from '../lib/auth';
 import {createUser} from '../lib/users';
 import BorderedInput from './BorderedInput';
 import CustomButton from './CustomButton';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 function SetupProfile() {
+  const [loading, setLoading] = useState(false);
+
+  const onSelectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === 'android',
+      },
+      res => {
+        console.log(res);
+      },
+    );
+  };
+
   const [displayName, setDisplayName] = useState('');
   const navigation = useNavigation();
 
@@ -27,7 +44,7 @@ function SetupProfile() {
 
   return (
     <View style={styles.block}>
-      <View style={styles.circle} />
+      <Pressable style={styles.circle} onPress={onSelectImage} />
       <View style={styles.form}>
         <BorderedInput
           placeholder="닉네임"

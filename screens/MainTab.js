@@ -2,15 +2,22 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet, View} from 'react-native';
 import HomeScreen from './HomeScreen';
-import NotificationScreen from './NotificationScreen';
-import MyPage from './MyPage';
-import IconRenderer from '../components/Icon';
+
+import MyProfileScreen from './MyProfileScreen';
+import WriteScreen from './WriteScreen';
+import SettingScreen from './SettingScreen';
+import Icon from 'react-native-vector-icons';
 
 const Tab = createBottomTabNavigator();
-function MainTab({navigation}) {
+
+function MainTab() {
+  //TODO : tabBarIcon 구현
   return (
     <View style={styles.block}>
-      <Tab.Navigator initialRouteName="Mypage">
+      <Tab.Navigator
+        initialRouteName="Mypage"
+        activeColor="#e91e63"
+        screenOptions={{tabBarShowLabel: false}}>
         <Tab.Screen
           name="Home"
           component={HomeScreen}
@@ -19,17 +26,26 @@ function MainTab({navigation}) {
           }}
         />
         <Tab.Screen
-          name="Notification"
-          component={NotificationScreen}
+          name="Write"
+          component={WriteScreen}
           options={{
-            title: '알림',
+            title: '글쓰기',
           }}
         />
         <Tab.Screen
-          name="Mypage"
-          component={MyPage}
+          name="MyProfile"
+          component={MyProfileScreen}
           options={{
             title: '기록들',
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Setting"
+          component={SettingScreen}
+          options={{
+            headerShown: false,
+            tabBarButton: () => null,
           }}
         />
       </Tab.Navigator>
