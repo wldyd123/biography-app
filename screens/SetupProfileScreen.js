@@ -6,15 +6,48 @@ import {
   SafeAreaView,
   Platform,
   Text,
+  Pressable,
+  Image,
 } from 'react-native';
 import BorderedInput from '../components/BorderedInput';
 import CustomButton from '../components/CustomButton';
 import {setUserOneliner} from '../lib/users';
+import {launchImageLibrary} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
 
 function SetupProfileScreen({navigation, route}) {
   const [oneliner, setOneliner] = useState('');
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
   const onChangeText = value => {
     setOneliner(value);
+  };
+  const onSelectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === 'android',
+      },
+      res => {
+        if (res.didCancel) {
+          return;
+        }
+        setResponse(res);
+      },
+    );
+  };
+  const onSubmit = async () => {
+    setLoading(true);
+
+    let photoURL = null;
+
+    if (response) {
+      const asset = response.assets[0];
+      const extension = asset.fileName.split('.').pop();
+      const reference = storage().ref(`/profile/${uid}.${extension}`);
+    }
   };
 
   return (
@@ -24,7 +57,16 @@ function SetupProfileScreen({navigation, route}) {
       <SafeAreaView style={styles.fullscreen}>
         <View style={styles.container}>
           <Text style={styles.imageUpload}>이미지 등록 (선택)</Text>
-          <View style={styles.circle} />
+          <Pressable onPress={onSelectImage}>
+            <Image
+              style={styles.circle}
+              source={
+                response
+                  ? {uri: response?.assets[0]?.uri}
+                  : require('../assets/user.png')
+              }
+            />
+          </Pressable>
         </View>
         <View style={styles.form}>
           <BorderedInput
@@ -37,8 +79,8 @@ function SetupProfileScreen({navigation, route}) {
           <CustomButton
             title="완료"
             onPress={() => {
-              setUserOneliner(oneliner);
-              navigation.navigate('MainTab');
+              setUserOneliner(oneliner, route.params.id);
+              // navigation.navigate('MainTab');
             }}
           />
         </View>
@@ -50,7 +92,12 @@ function SetupProfileScreen({navigation, route}) {
 const styles = StyleSheet.create({
   keyboardAvoidingView: {flex: 1},
   fullscreen: {flex: 1},
-  container: {flex: 1, alignSelf: 'center', justifyContent: 'flex-end'},
+  container: {
+    flex: 1,
+    alignSelf: 'center',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
   imageUpload: {marginBottom: 20},
   circle: {
     backgroundColor: '#cdcdcd',
