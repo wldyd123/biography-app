@@ -15,7 +15,7 @@ function PageScreen({route, navigation, title, body}) {
   const {question} = route.params;
   const SeparatorView = () => {
     return <View style={styles.listItemSeparatorStyle} />;
-  };
+  }; //따로 두면 됨. 컴포넌트 안에 컴포넌트 두면 경고뜰 수 있음.
 
   return (
     <SafeAreaView style={styles.block}>
