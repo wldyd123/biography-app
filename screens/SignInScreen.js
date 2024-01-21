@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Alert,
   Keyboard,
@@ -13,6 +13,7 @@ import SignButtons from '../components/SignButtons';
 import SignInForm from '../components/SignForm';
 import KakaoLogin from '../components/KakaoLogin';
 import {signIn, signUp} from '../lib/auth';
+import {UserContext} from '../contexts/UserContext';
 
 function SignInScreen({navigation, route}) {
   const {isSignUp} = route.params || {};
@@ -24,6 +25,8 @@ function SignInScreen({navigation, route}) {
   });
   const [loading, setLoading] = useState();
 
+  const {setUser} = useContext(UserContext);
+
   const createChangeTextHandler = name => value => {
     setForm({...form, [name]: value});
   };
@@ -31,14 +34,13 @@ function SignInScreen({navigation, route}) {
   const onSubmit = async () => {
     Keyboard.dismiss();
 
-    const {email, password, confirmPassword} = form;
+    const {email, password} = form;
 
     setLoading(true);
     const info = {email, password};
 
     try {
-      const {user} = isSignUp ? await signUp(info) : await signIn(info);
-      console.log(user);
+      setUser(isSignUp ? await signUp(info) : await signIn(info));
     } catch (e) {
       const messages = {
         'auth/email-already-in-use': '이미 가입된 이메일입니다.',
@@ -46,8 +48,8 @@ function SignInScreen({navigation, route}) {
         'auth/user-not-found': '존재하지 않는 계정입니다.',
         'auth/invalid-email': '유효하지 않은 이메일 주소입니다.',
       };
-      const msg = messages[e.code] || `${isSignUp ? '가입' : '로그인'} 실패`;
-      Alert.alert('실패', msg);
+      // const msg = messages[e.code] || `${isSignUp ? '가입' : '로그인'} 실패`;
+      Alert.alert('실패', e.code);
     } finally {
       setLoading(false);
     }
