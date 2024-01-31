@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, View, Text, Button} from 'react-native';
+import {Pressable, StyleSheet, View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function WriteHeader() {
+function WriteHeader({onSave}) {
   const navigation = useNavigation();
   const onGoBack = () => {
     navigation.pop();
+  };
+
+  const onNavigateToEssay = () => {
+    onSave();
+    navigation.navigate('Essay');
   };
 
   const [isPublic, setIsPublic] = useState(true);
@@ -36,8 +41,9 @@ function WriteHeader() {
             </Text>
           </Pressable>
         </View>
+
         <View style={styles.complete}>
-          <Pressable>
+          <Pressable onPress={onNavigateToEssay}>
             <Text style={styles.buttonText}>완료</Text>
           </Pressable>
         </View>

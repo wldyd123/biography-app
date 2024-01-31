@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SettingHeader from '../components/SettingHeader';
 import AsyncStorage from '@react-native-community/async-storage';
+import MyEssayHeader from '../components/MyEssayHeader';
 
 function Header() {
   return (
@@ -18,7 +19,7 @@ function Header() {
   );
 }
 
-function EssayScreen() {
+function MyEssayScreen() {
   const [essayTitle, setEssayTitle] = useState('');
   const [essayBody, setEssayBody] = useState('');
 
@@ -43,15 +44,15 @@ function EssayScreen() {
 
   return (
     <View style={styles.block}>
-      <View>
-        <SettingHeader />
+      <MyEssayHeader />
+      <View style={styles.content}>
+        <Header />
+        <Text style={styles.title}>{essayTitle}</Text>
+        <View>
+          <Text style={styles.content}>{essayBody}</Text>
+        </View>
+        <Text style={styles.date}>2023.09.25</Text>
       </View>
-      <Header />
-      <Text style={styles.title}>{essayTitle}</Text>
-      <View>
-        <Text style={styles.content}>{essayBody}</Text>
-      </View>
-      <Text style={styles.date}>2023.09.25</Text>
     </View>
   );
 }
@@ -59,8 +60,12 @@ function EssayScreen() {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: 'white',
+  },
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerBlock: {
     flexDirection: 'row',
@@ -87,4 +92,4 @@ const styles = StyleSheet.create({
   content: {fontSize: 14, paddingHorizontal: 30, paddingBottom: 70},
   date: {paddingLeft: 10},
 });
-export default EssayScreen;
+export default MyEssayScreen;

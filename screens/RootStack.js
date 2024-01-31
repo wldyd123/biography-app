@@ -11,17 +11,42 @@ import PageScreen from './PageScreen';
 import SettingScreen from './SettingScreen';
 import ProfileScreen from './ProfileScreen';
 import InformationScreen from './InformationScreen';
-
+import EssayScreen from './EssayScreen';
+import MyEssayScreen from './MyEssayScreen';
+import HomeScreen from './HomeScreen';
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="SetupProfile"
+        component={SetupProfileScreen}
+        options={{headerTitleAlign: 'center'}}
+      />
+      <Stack.Screen
+        name="MyEssay"
+        component={MyEssayScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="List"
         options={{title: '글쓰기'}}
         component={ListScreen}
       />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="Essay"
+        options={{title: 'Essay'}}
+        component={EssayScreen}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name="Setting"
         component={SettingScreen}
@@ -56,11 +81,7 @@ function RootStack() {
       />
       <Stack.Screen name="WebView" component={WebviewScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen
-        name="SetupProfile"
-        component={SetupProfileScreen}
-        options={{headerTitleAlign: 'center'}}
-      />
+
       <Stack.Screen
         name="Page"
         options={{title: '페이지', headerShown: false}}

@@ -1,6 +1,5 @@
 import React from 'react';
 import {SafeAreaView, View, StyleSheet, Text, SectionList} from 'react-native';
-import PageScreen from './PageScreen';
 
 function ListScreen({navigation}) {
   let A = [

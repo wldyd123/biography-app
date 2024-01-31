@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, TextInput, StyleSheet, View, Text} from 'react-native';
-import WriteEditor from '../components/WriteEditor';
 import WriteHeader from '../components/WriteHeader';
+import AsyncStorage from '@react-native-community/async-storage';
 
 function Question(props) {
   return (
@@ -11,24 +11,36 @@ function Question(props) {
   );
 }
 
-function PageScreen({route, navigation, title, body}) {
-  const {question} = route.params;
+function PageScreen({route, navigation}) {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+
+  const saveText = async () => {
+    try {
+      await AsyncStorage.setItem('essayTitle', title);
+      await AsyncStorage.setItem('essayBody', body);
+    } catch (error) {
+      console.error('Error saving text:', error);
+    }
+  };
+  const {question} = route.params || {};
   const SeparatorView = () => {
     return <View style={styles.listItemSeparatorStyle} />;
   };
 
   return (
     <SafeAreaView style={styles.block}>
-      <WriteHeader />
+      <WriteHeader onSave={saveText} />
       <SeparatorView />
       <View style={styles.block}>
-        <Question ask={question} />
+        {question && <Question ask={question} />}
 
         <TextInput
           placeholder="제목을 입력하세요"
           style={styles.titleInput}
           returnKeyType="next"
           value={title}
+          onChangeText={value => setTitle(value)}
         />
 
         <TextInput
@@ -37,6 +49,7 @@ function PageScreen({route, navigation, title, body}) {
           multiline
           textAlignVertical="top"
           value={body}
+          onChangeText={value => setBody(value)}
         />
       </View>
     </SafeAreaView>

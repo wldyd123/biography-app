@@ -1,20 +1,39 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 function UserProfile() {
+  const [userImage, setUserImage] = useState(null);
+  const [introText, setIntroText] = useState('');
   const userName = 'Benseo';
-  const userPresentation = '하루하루 채워가는 삶을 사는 벤세오입니다.';
+
+  useEffect(() => {
+    const getStoredContent = async () => {
+      try {
+        //Async에서 프로필 이미지 가져옴.
+        const storedImage = await AsyncStorage.getItem('profileImage');
+        //Async에서 소개글 가져옴.
+        const storedIntroText = await AsyncStorage.getItem('oneliner');
+
+        if (storedImage !== null) {
+          setUserImage(storedImage);
+        }
+        if (storedIntroText !== null) {
+          setIntroText(storedIntroText);
+        }
+      } catch (error) {
+        console.error('Error retrieving content:', error);
+      }
+    };
+
+    getStoredContent();
+  }, []);
 
   return (
     <View style={styles.block}>
-      <Image
-        source={{
-          uri: 'https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg',
-        }}
-        style={styles.image}
-      />
+      <Image source={{uri: userImage}} style={styles.image} />
       <Text style={styles.name}>{userName}</Text>
-      <Text style={styles.presentation}>{userPresentation}</Text>
+      <Text style={styles.presentation}>{introText}</Text>
     </View>
   );
 }
