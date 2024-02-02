@@ -2,21 +2,37 @@ import React, {useState} from 'react';
 import {Pressable, StyleSheet, View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import essaysStorage from '../storages/essaysStorage';
+import {CommonActions} from '@react-navigation/native';
 
 function WriteHeader({onSave}) {
   const navigation = useNavigation();
+  const [isPublic, setIsPublic] = useState(true);
+  const toggleVisibility = () => {
+    setIsPublic(!isPublic);
+  };
+
   const onGoBack = () => {
     navigation.pop();
   };
 
-  const onNavigateToEssay = () => {
-    onSave();
-    navigation.navigate('Essay');
-  };
+  const onNavigateToEssay = async () => {
+    await onSave(); //onSave호출하여 essay 저장.
 
-  const [isPublic, setIsPublic] = useState(true);
-  const toggleVisibility = () => {
-    setIsPublic(!isPublic);
+    const storedEssays = await essaysStorage.get(); //글 목록 갱신.
+    navigation.navigate('Essay');
+
+    const essayScreen = navigation
+      .getState()
+      .routes.find(route => route.name === 'Essay'); //'Essay'라는 스크린을 찾아 essayScreen변수에 할당.
+    if (essayScreen) {
+      //essay 스크린이 존재하는 경우에만 다음 동작 수행.
+      navigation.dispatch({
+        //setParams로 essay스크린에 전달할 파라미터 설정.
+        ...CommonActions.setParams({refresh: storedEssays}), //refresh라는 파라미터 설정하고, 이 값으로 storedEssays를 전달함.
+        source: essayScreen.key, //이 액션이 어디서 시작되었는지 지정. essayScreen에서 시작되었음을 나타내기 위함.
+      });
+    }
   };
 
   return (

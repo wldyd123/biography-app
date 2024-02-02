@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {SafeAreaView, TextInput, StyleSheet, View, Text} from 'react-native';
 import WriteHeader from '../components/WriteHeader';
-import AsyncStorage from '@react-native-community/async-storage';
+import essaysStorage from '../storages/essaysStorage';
 
 function Question(props) {
   return (
@@ -12,15 +12,29 @@ function Question(props) {
 }
 
 function PageScreen({route, navigation}) {
+  // title, body 구분에서 -> Essay로 수정.
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
-  const saveText = async () => {
+  const saveEssay = async () => {
     try {
-      await AsyncStorage.setItem('essayTitle', title);
-      await AsyncStorage.setItem('essayBody', body);
+      //새로운 Essay 객체 생성.
+      const newEssay = {
+        id: Date.now(),
+        title: title,
+        body: body,
+        question: question,
+      };
+
+      //그리고 storage에 업데이트된 Essays 저장.
+      await essaysStorage.set(newEssay);
+
+      console.log('Essay saved successfully');
+
+      const storedEssays = await essaysStorage.get();
+      console.log('Stored Essays:', storedEssays);
     } catch (error) {
-      console.error('Error saving text:', error);
+      console.error('Error saving essay:', error);
     }
   };
   const {question} = route.params || {};
@@ -30,7 +44,7 @@ function PageScreen({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.block}>
-      <WriteHeader onSave={saveText} />
+      <WriteHeader onSave={saveEssay} />
       <SeparatorView />
       <View style={styles.block}>
         {question && <Question ask={question} />}

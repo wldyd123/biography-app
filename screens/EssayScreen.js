@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {View, Text, Image, StyleSheet, Pressable, Button} from 'react-native';
 import SettingHeader from '../components/SettingHeader';
-import AsyncStorage from '@react-native-community/async-storage';
+import essaysStorage from '../storages/essaysStorage';
 
 function Header() {
   return (
@@ -21,37 +19,56 @@ function Header() {
 function EssayScreen() {
   const [essayTitle, setEssayTitle] = useState('');
   const [essayBody, setEssayBody] = useState('');
+  const [essayTime, setEssayTime] = useState();
+  const [essayQuestion, setEssayQuestion] = useState('');
 
   useEffect(() => {
-    const getStoredText = async () => {
+    const getStoredEssay = async () => {
       try {
-        const storedTitle = await AsyncStorage.getItem('essayTitle');
-        const storedBody = await AsyncStorage.getItem('essayBody');
-
-        if (storedTitle !== null) {
-          setEssayTitle(storedTitle);
-        }
-        if (storedBody !== null) {
-          setEssayBody(storedBody);
+        const storedEssays = await essaysStorage.get();
+        if (storedEssays.length > 0) {
+          const lastEssay = storedEssays[storedEssays.length - 1];
+          setEssayTitle(lastEssay.title);
+          setEssayBody(lastEssay.body);
+          setEssayTime(lastEssay.createdAt);
+          setEssayQuestion(lastEssay.question);
         }
       } catch (error) {
-        console.error('Error retrieving text:', error);
+        console.error('Error retrieving essay:', error);
       }
     };
-    getStoredText();
-  }, [essayTitle, essayBody]);
+    getStoredEssay();
+  }, []);
+
+  const clearAsyncStorage = async () => {
+    try {
+      await essaysStorage.clear();
+    } catch (error) {
+      console.error('Failed to clear AsyncStorage:', error);
+    }
+  };
+
+  const formatDate = time => {
+    const options = {year: 'numeric', month: '2-digit', day: '2-digit'};
+    const formattedDate = new Date(time).toLocaleString(undefined, options);
+    const [year, month, day] = formattedDate.split(/\D+/);
+
+    return `${year}년 ${month}월 ${day}일`;
+  };
 
   return (
     <View style={styles.block}>
       <View>
         <SettingHeader />
+        <Button title="Clear AsyncStorage" onPress={clearAsyncStorage} />
       </View>
       <Header />
+      <Text style={styles.question}>{essayQuestion}</Text>
       <Text style={styles.title}>{essayTitle}</Text>
       <View>
         <Text style={styles.content}>{essayBody}</Text>
       </View>
-      <Text style={styles.date}>2023.09.25</Text>
+      <Text style={styles.date}>{formatDate(essayTime)}</Text>
     </View>
   );
 }
@@ -76,6 +93,14 @@ const styles = StyleSheet.create({
   //텍스트
   name: {
     paddingLeft: 10,
+  },
+  question: {
+    fontSize: 13,
+    paddingBottom: 2,
+    paddingHorizontal: 15,
+    paddingBottom: 15,
+    fontWeight: 'normal',
+    color: 'gray',
   },
   title: {
     fontSize: 16,
