@@ -8,12 +8,12 @@ import {
   Platform,
   Text,
   Pressable,
+  TextInput,
 } from 'react-native';
 import BorderedInput from '../components/BorderedInput';
 import CustomButton from '../components/CustomButton';
-import {setUserOneliner} from '../lib/users';
 import {launchImageLibrary} from 'react-native-image-picker';
-import AsyncStorage from '@react-native-community/async-storage';
+import usersStorage from '../storages/usersStorage';
 
 function SetupProfileScreen({navigation, route}) {
   const [oneliner, setOneliner] = useState('');
@@ -33,14 +33,28 @@ function SetupProfileScreen({navigation, route}) {
           return;
         }
         setResponse(res);
-        AsyncStorage.setItem('profileImage', res?.assets[0]?.uri);
-        //이미지를 AsyncStorage에 저장.
+        setProfileImage(res?.assets[0]?.uri);
+        //저장소에 이미지 저장은 아니고 profileImage에 새로운 상태 업데이또.
       },
     );
   };
 
-  const onChangeText = () => {
-    AsyncStorage.setItem('oneliner', oneliner);
+  const onChangeText = text => {
+    setOneliner(text);
+  };
+
+  const saveUserProfile = async () => {
+    try {
+      const newUser = {
+        profileImage: profileImage || '',
+        oneliner: oneliner || '',
+      };
+      await usersStorage.set(newUser);
+      console.log('User profile saved successfully');
+      navigation.navigate('MainTab');
+    } catch (error) {
+      console.error('Error saving user profile:', error);
+    }
   };
 
   return (
@@ -68,12 +82,7 @@ function SetupProfileScreen({navigation, route}) {
             onChangeText={onChangeText}
             returnKeyType="done"
           />
-          <CustomButton
-            title="완료"
-            onPress={() => {
-              navigation.navigate('MainTab');
-            }}
-          />
+          <CustomButton title="완료" onPress={saveUserProfile} />
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>

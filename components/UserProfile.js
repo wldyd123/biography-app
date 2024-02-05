@@ -1,25 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import usersStorage from '../storages/usersStorage';
 
 function UserProfile() {
   const [userImage, setUserImage] = useState(null);
-  const [introText, setIntroText] = useState('');
+  const [oneliner, setOneliner] = useState('');
   const userName = 'Benseo';
 
   useEffect(() => {
     const getStoredContent = async () => {
       try {
-        //Async에서 프로필 이미지 가져옴.
-        const storedImage = await AsyncStorage.getItem('profileImage');
-        //Async에서 소개글 가져옴.
-        const storedIntroText = await AsyncStorage.getItem('oneliner');
+        const line = await usersStorage.getLine();
+        const image = await usersStorage.getImage();
 
-        if (storedImage !== null) {
-          setUserImage(storedImage);
-        }
-        if (storedIntroText !== null) {
-          setIntroText(storedIntroText);
+        if (line || image) {
+          const imageUri = image || '';
+          setUserImage(imageUri.toString());
+          setOneliner(line || '');
+
+          console.log('oneliner', line || '');
+        } else {
+          setUserImage('');
         }
       } catch (error) {
         console.error('Error retrieving content:', error);
@@ -27,13 +28,16 @@ function UserProfile() {
     };
 
     getStoredContent();
-  }, []);
+  });
 
   return (
     <View style={styles.block}>
-      <Image source={{uri: userImage}} style={styles.image} />
+      <Image
+        source={userImage ? {uri: userImage} : require('../assets/user.png')}
+        style={styles.image}
+      />
       <Text style={styles.name}>{userName}</Text>
-      <Text style={styles.presentation}>{introText}</Text>
+      <Text style={styles.presentation}>{oneliner}</Text>
     </View>
   );
 }
