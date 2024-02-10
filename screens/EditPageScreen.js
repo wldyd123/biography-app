@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {SafeAreaView, TextInput, StyleSheet, View, Text} from 'react-native';
-import WriteHeader from '../components/WriteHeader';
 import essaysStorage from '../storages/essaysStorage';
+import EditWriteHeader from '../components/EditWriteHeader';
 
 function Question(props) {
   return (
@@ -11,46 +11,47 @@ function Question(props) {
   );
 }
 
-function PageScreen({route, navigation}) {
+function EditPageScreen({route, navigation}) {
   // title, body 구분에서 -> Essay로 수정.
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [essays, setEssays] = useState();
+  const {
+    id,
+    title: initialTitle,
+    body: initialBody,
+    question,
+    isPublic: initialIsPublic,
+  } = route.params || {};
+  const [title, setTitle] = useState(initialTitle || '');
+  const [body, setBody] = useState(initialBody || '');
+  const [isPublic, setIsPublic] = useState(initialIsPublic);
 
   const saveEssay = async publicStatus => {
     try {
-      console.log('received isPublic:', publicStatus);
-
       //새로운 Essay 객체 생성.
-      const newEssay = {
-        id: Date.now(),
+      const updatedEssay = {
+        id: id,
         title: title,
         body: body,
-        question: question,
+        createdAt: Date.now(),
         isPublic: publicStatus,
       };
 
       //그리고 storage에 업데이트된 Essays 저장.
-      await essaysStorage.set(newEssay);
+      await essaysStorage.update(id, updatedEssay);
 
-      console.log('Essay saved successfully');
-
-      const storedEssays = await essaysStorage.get();
-      console.log('Stored Essays:', storedEssays);
-
-      setEssays(storedEssays);
+      console.log('Essay updated successfully');
+      navigation.navigate('MyEssay', {id: id});
     } catch (error) {
       console.error('Error saving essay:', error);
     }
   };
-  const {question} = route.params || {};
+
   const SeparatorView = () => {
     return <View style={styles.listItemSeparatorStyle} />;
   };
 
   return (
     <SafeAreaView style={styles.block}>
-      <WriteHeader onSave={saveEssay} />
+      <EditWriteHeader onSave={saveEssay} defaultPublic={initialIsPublic} />
       <SeparatorView />
       <View style={styles.block}>
         {question && <Question ask={question} />}
@@ -59,7 +60,7 @@ function PageScreen({route, navigation}) {
           placeholder="제목을 입력하세요"
           style={styles.titleInput}
           returnKeyType="next"
-          value={title}
+          defaultValue={initialTitle}
           onChangeText={value => setTitle(value)}
         />
 
@@ -68,7 +69,7 @@ function PageScreen({route, navigation}) {
           style={styles.bodyInput}
           multiline
           textAlignVertical="top"
-          value={body}
+          defaultValue={initialBody}
           onChangeText={value => setBody(value)}
         />
       </View>
@@ -117,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PageScreen;
+export default EditPageScreen;

@@ -1,6 +1,9 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import MainEssay from '../components/MainEssay';
+import essaysStorage from '../storages/essaysStorage';
+import {useNavigation} from '@react-navigation/native';
+import usersStorage from '../storages/usersStorage';
 
 function HomeHeader() {
   return (
@@ -20,19 +23,71 @@ function MenuTab() {
 }
 //스크롤 뷰 넣을 것.
 function HomeScreen() {
+  const navigation = useNavigation();
+  const [essays, setEssays] = useState([]);
+  const [image, setImage] = useState();
+  const [nickname, setNickname] = useState();
+  useEffect(() => {
+    const loadEssays = async () => {
+      try {
+        const storedEssays = await essaysStorage.get();
+        const filteredEssays = storedEssays
+          .filter(item => item.isPublic)
+          .reverse();
+        setEssays(filteredEssays);
+      } catch (error) {
+        console.error('Error loading essays:', error);
+      }
+    };
+
+    const loadUser = async () => {
+      try {
+        const image = await usersStorage.getImage();
+        const nickname = await usersStorage.getNickname();
+        setImage(image);
+        setNickname(nickname);
+      } catch (error) {
+        console.error('Error loading user:', error);
+      }
+    };
+    loadEssays();
+    loadUser();
+  }, []);
+
+  const handleEssayPress = item => {
+    const clickedEssay = essays.find(essay => essay.id === item.id);
+    navigation.navigate('Essay', {
+      question: clickedEssay.question,
+      title: clickedEssay.title,
+      body: clickedEssay.body,
+      time: clickedEssay.createdAt,
+      nickname: nickname,
+      image: image,
+    });
+  };
+
   return (
     <View style={styles.block}>
       <HomeHeader />
       <MenuTab />
 
       <View style={styles.essay}>
-        <ScrollView>
-          <View style={styles.essayZone}>
-            <MainEssay />
-            <MainEssay />
-            <MainEssay />
-          </View>
-        </ScrollView>
+        <FlatList
+          data={essays}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <TouchableOpacity onPress={() => handleEssayPress(item)}>
+              <MainEssay
+                question={item.question}
+                title={item.title}
+                body={item.body}
+                time={item.createdAt}
+                nickname={nickname}
+                image={image}
+              />
+            </TouchableOpacity>
+          )}
+        />
       </View>
     </View>
   );

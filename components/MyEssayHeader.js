@@ -3,10 +3,13 @@ import {Pressable, StyleSheet, View, Text, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function MyEssayHeader(props) {
+function MyEssayHeader({id, title, body, question, onDelete}) {
   const navigation = useNavigation();
   const onGoBack = () => {
     navigation.pop();
+  };
+  const onEditPress = () => {
+    navigation.navigate('EditPage', {id, title, body, question});
   };
 
   return (
@@ -21,10 +24,10 @@ function MyEssayHeader(props) {
       </View>
 
       <View style={styles.twoButtons}>
-        <Pressable style={styles.reviseButton}>
+        <Pressable style={styles.reviseButton} onPress={onEditPress}>
           <Text>수정하기</Text>
         </Pressable>
-        <Pressable style={styles.deleteButton}>
+        <Pressable style={styles.deleteButton} onPress={onDelete}>
           <Text>삭제</Text>
         </Pressable>
       </View>

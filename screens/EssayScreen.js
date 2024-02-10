@@ -2,16 +2,14 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, Image, StyleSheet, Pressable, Button} from 'react-native';
 import SettingHeader from '../components/SettingHeader';
 import essaysStorage from '../storages/essaysStorage';
+import usersStorage from '../storages/usersStorage';
+import {useNavigation} from '@react-navigation/native';
 
-function Header() {
+function Header({image, nickname}) {
   return (
     <View style={styles.headerBlock}>
-      <Image
-        source={require('../assets/images/human.jpg')}
-        borderRadius={100}
-        style={styles.image}
-      />
-      <Text style={styles.name}>김소라</Text>
+      <Image source={{uri: image}} borderRadius={100} style={styles.image} />
+      <Text style={styles.name}>{nickname}</Text>
     </View>
   );
 }
@@ -21,6 +19,8 @@ function EssayScreen() {
   const [essayBody, setEssayBody] = useState('');
   const [essayTime, setEssayTime] = useState();
   const [essayQuestion, setEssayQuestion] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [userImage, setUserImage] = useState();
 
   useEffect(() => {
     const getStoredEssay = async () => {
@@ -37,7 +37,25 @@ function EssayScreen() {
         console.error('Error retrieving essay:', error);
       }
     };
+
+    const getStoredUser = async () => {
+      try {
+        const image = await usersStorage.getImage();
+        const nickname = await usersStorage.getNickname();
+
+        if (nickname || image) {
+          const imageUri = image || '';
+          setUserImage(imageUri.toString());
+          setNickname(nickname || '');
+        } else {
+          setUserImage('');
+        }
+      } catch (error) {
+        console.error('Error retrieving user:', error);
+      }
+    };
     getStoredEssay();
+    getStoredUser();
   }, []);
 
   const clearAsyncStorage = async () => {
@@ -56,19 +74,32 @@ function EssayScreen() {
     return `${year}년 ${month}월 ${day}일`;
   };
 
+  const navigation = useNavigation();
+  const moveToMyPage = () => {
+    navigation.navigate('MyPage');
+  };
+  const moveToHomeScreen = () => {
+    navigation.navigate('Home');
+  };
+  const moveToListScreen = () => {
+    navigation.navigate('List');
+  };
   return (
     <View style={styles.block}>
       <View>
         <SettingHeader />
         <Button title="Clear AsyncStorage" onPress={clearAsyncStorage} />
       </View>
-      <Header />
+      <Header image={userImage} nickname={nickname} />
       <Text style={styles.question}>{essayQuestion}</Text>
       <Text style={styles.title}>{essayTitle}</Text>
       <View>
         <Text style={styles.content}>{essayBody}</Text>
       </View>
       <Text style={styles.date}>{formatDate(essayTime)}</Text>
+      <Button title="Move to MyPage" onPress={moveToMyPage} />
+      <Button title="Move to HomeScreen" onPress={moveToHomeScreen} />
+      <Button title="Move to ListScreen" onPress={moveToListScreen} />
     </View>
   );
 }

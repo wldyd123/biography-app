@@ -1,13 +1,21 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 
-function Post({category, title, content}) {
+function Post({question, title, body, time}) {
+  const formatDate = time => {
+    const options = {year: 'numeric', month: '2-digit', day: '2-digit'};
+    const formattedDate = new Date(time).toLocaleString(undefined, options);
+    const [year, month, day] = formattedDate.split(/\D+/);
+
+    return `${year}.${month}.${day}`;
+  };
   return (
     <View style={styles.item}>
       <View>
-        <Text style={styles.category}>{category}</Text>
+        <Text style={styles.body}>{formatDate(time)}</Text>
+        <Text style={styles.question}>{question}</Text>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.content}>{content}</Text>
+        <Text style={styles.body}>{body}</Text>
       </View>
       <Image
         style={styles.image}
@@ -21,7 +29,7 @@ function Post({category, title, content}) {
 
 const styles = StyleSheet.create({
   item: {padding: 15, alignsItems: 'center', flexDirection: 'row'},
-  category: {flex: 1, fontSize: 12, color: '#808080'},
+  question: {flex: 1, fontSize: 12, color: '#808080'},
   title: {
     flex: 1,
     padding: 3,
@@ -29,7 +37,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000000',
   },
-  content: {flex: 1, fontSize: 14, color: '#505050'},
+  body: {flex: 1, fontSize: 14, color: '#505050'},
   image: {borderRadius: 20, flex: 1},
 });
 

@@ -9,6 +9,7 @@ import {
   Text,
   Pressable,
   TextInput,
+  Button,
 } from 'react-native';
 import BorderedInput from '../components/BorderedInput';
 import CustomButton from '../components/CustomButton';
@@ -19,6 +20,7 @@ function SetupProfileScreen({navigation, route}) {
   const [oneliner, setOneliner] = useState('');
   const [response, setResponse] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+  const [nickname, setNickname] = useState('');
 
   const onSelectImage = () => {
     launchImageLibrary(
@@ -43,15 +45,28 @@ function SetupProfileScreen({navigation, route}) {
     setOneliner(text);
   };
 
+  const onChangeNickname = text => {
+    setNickname(text);
+  };
+  const moveToModifyProfile = () => {
+    navigation.navigate('ModifyProfile');
+  };
+
   const saveUserProfile = async () => {
     try {
       const newUser = {
         profileImage: profileImage || '',
         oneliner: oneliner || '',
+        nickname: nickname || '',
       };
       await usersStorage.set(newUser);
       console.log('User profile saved successfully');
-      navigation.navigate('MainTab');
+
+      navigation.push('ModifyProfile', {
+        oneliner,
+        profileImage,
+        nickname,
+      });
     } catch (error) {
       console.error('Error saving user profile:', error);
     }
@@ -82,7 +97,15 @@ function SetupProfileScreen({navigation, route}) {
             onChangeText={onChangeText}
             returnKeyType="done"
           />
+          <BorderedInput
+            placeholder="닉네임 작성"
+            value={nickname}
+            profile={styles.profile}
+            onChangeText={onChangeNickname}
+            returnKeyType="done"
+          />
           <CustomButton title="완료" onPress={saveUserProfile} />
+          <CustomButton title="프로필 수정" onPress={moveToModifyProfile} />
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
@@ -104,7 +127,7 @@ const styles = StyleSheet.create({
   },
   circle: {
     // flex: 1,
-    marginBottom: 80,
+    marginBottom: 30,
     backgroundColor: '#cdcdcd',
     borderRadius: 64,
     width: 128,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -7,12 +7,82 @@ import {
   View,
   TextInput,
   KeyboardAvoidingView,
+  Button,
 } from 'react-native';
 import SettingHeader from '../components/SettingHeader';
-import Icon from 'react-native-vector-icons/Feather';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {launchImageLibrary} from 'react-native-image-picker';
+import usersStorage from '../storages/usersStorage';
+import BorderedInput from '../components/BorderedInput';
 
-function ModifyProfileScreen({navigation}) {
+function ModifyProfileScreen({route, navigation}) {
+  const {
+    oneliner: initialOneliner,
+    nickname: initialNickname,
+    profileImage: initialProfileImage,
+  } = route.params || {};
+  const [oneliner, setOneliner] = useState(initialOneliner || '');
+  const [response, setResponse] = useState(
+    initialProfileImage ? {assets: [{uri: initialProfileImage}]} : null,
+  );
+  const [profileImage, setProfileImage] = useState(initialProfileImage || null);
+  const [nickname, setNickname] = useState(initialNickname || '');
+
+  const onSelectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === 'android',
+      },
+      res => {
+        if (res.didCancel) {
+          return;
+        }
+        setResponse(res);
+        setProfileImage(res?.assets[0]?.uri);
+        //저장소에 이미지 저장은 아니고 profileImage에 새로운 상태 업데이또.
+      },
+    );
+  };
+
+  const moveToSetupProfile = () => {
+    navigation.navigate('SetupProfile');
+  };
+  const moveToMainTab = () => {
+    navigation.navigate('MainTab');
+  };
+  const onChangeText = text => {
+    setOneliner(text);
+  };
+
+  const onChangeNickname = text => {
+    setNickname(text);
+  };
+  const changeUserProfile = async () => {
+    try {
+      const newUser = {
+        profileImage: profileImage || '',
+        oneliner: oneliner || '',
+        nickname: nickname || '',
+      };
+      await usersStorage.set(newUser);
+      console.log('User profile updated successfully');
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+    }
+  };
+  const deleteImage = async () => {
+    try {
+      await usersStorage.delete();
+      setResponse(null);
+      console.log('User profileImage deleted successfully');
+    } catch (error) {
+      console.error('Error deleting user profile:', error);
+    }
+  };
+
   const Menu = props => {
     return (
       <View style={styles.menuBlock}>
@@ -29,7 +99,7 @@ function ModifyProfileScreen({navigation}) {
           {/*변경하기버튼*/}
           <View style={styles.btnWrapper}>
             <View style={styles.changeBtn}>
-              <Pressable>
+              <Pressable onPress={changeUserProfile}>
                 <Text>변경하기</Text>
               </Pressable>
             </View>
@@ -42,15 +112,23 @@ function ModifyProfileScreen({navigation}) {
             <Menu title={'이미지'} />
 
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <View style={styles.pictureBlock}>
-                <Icon name="user" color="black" size={70} />
-              </View>
+              <Image
+                style={styles.circle}
+                source={
+                  response
+                    ? {uri: response?.assets[0]?.uri}
+                    : require('../assets/user.png')
+                }
+              />
+
               <View style={styles.twoBtn}>
-                <Pressable style={styles.imageBtn}>
+                <Pressable style={styles.imageBtn} onPress={onSelectImage}>
                   <Text style={styles.btnText}>등록</Text>
                 </Pressable>
                 <Pressable style={styles.imageBtn}>
-                  <Text style={styles.btnText}>삭제</Text>
+                  <Text style={styles.btnText} onPress={deleteImage}>
+                    삭제
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -58,15 +136,21 @@ function ModifyProfileScreen({navigation}) {
           <View style={styles.nameBlock}>
             <Menu title={'닉네임'} />
             <View>
-              <TextInput style={{borderBottomWidth: 1, marginHorizontal: 10}} />
+              <TextInput
+                defaultValue={initialNickname}
+                onChangeText={onChangeNickname}
+              />
             </View>
           </View>
           <View style={styles.introduceBlock}>
             <Menu title={'한줄 소개'} />
             <View>
               <TextInput
-                style={{borderWidth: 1, borderRadius: 15, marginTop: 10}}
+                defaultValue={initialOneliner}
+                onChangeText={onChangeText}
               />
+              <Button title={'프로필설정이동'} onPress={moveToSetupProfile} />
+              <Button title={'메인탭이동'} onPress={moveToMainTab} />
             </View>
           </View>
         </View>
@@ -86,7 +170,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   imageBlock: {flex: 2, justifyContent: 'center'},
-
+  circle: {
+    // flex: 1,
+    marginBottom: 80,
+    backgroundColor: '#cdcdcd',
+    borderRadius: 64,
+    width: 128,
+    height: 128,
+  },
   nameBlock: {flex: 1, marginVertical: 5},
   introduceBlock: {flex: 3},
   btnWrapper: {

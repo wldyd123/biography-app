@@ -1,10 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, View, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  View,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import Post from './Post';
 import essaysStorage from '../storages/essaysStorage';
+import {useNavigation} from '@react-navigation/native';
 
 function UserPosts() {
   const [essays, setEssays] = useState([]);
+  const navigation = useNavigation();
   useEffect(() => {
     const loadEssays = async () => {
       try {
@@ -15,21 +23,42 @@ function UserPosts() {
       }
     };
     loadEssays();
-  }, []); //빈 배열을 넣어 한 번만 실행되도록 한다?!
+  }, []);
+
+  const handleMyEssayPress = item => {
+    navigation.navigate('MyEssay', {
+      id: item.id,
+      question: item.question,
+      title: item.title,
+      body: item.body,
+      time: item.createdAt,
+    });
+  };
+  const reverseOrder = () => {
+    setEssays(prevEssays => [...prevEssays].reverse());
+  };
+
   return (
-    <FlatList
-      ItemSeparatorComponent={() => <View style={styles.separator} />}
-      style={styles.list}
-      data={essays}
-      keyExtractor={item => item.id.toString()} //각 아이템의 고유 키 지정
-      renderItem={({item}) => (
-        <Post
-          category={item.category}
-          title={item.title}
-          content={item.content}
-        />
-      )}
-    />
+    <>
+      <Button title="Reverse Order" onPress={reverseOrder} />
+      <FlatList
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        style={styles.list}
+        data={essays}
+        keyExtractor={item => item.id.toString()} //각 아이템의 고유 키 지정
+        renderItem={({item}) => (
+          <TouchableOpacity onPress={() => handleMyEssayPress(item)}>
+            <Post
+              id={item.id}
+              question={item.question}
+              title={item.title}
+              body={item.body}
+              time={item.createdAt}
+            />
+          </TouchableOpacity>
+        )}
+      />
+    </>
   );
 }
 

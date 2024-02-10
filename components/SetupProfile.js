@@ -1,6 +1,6 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Button} from 'react-native';
 import {signOut} from '../lib/auth';
 import {createUser} from '../lib/users';
 import BorderedInput from './BorderedInput';
@@ -25,6 +25,10 @@ function SetupProfile() {
     navigation.goBack();
   };
 
+  const moveToModifyProfile = () => {
+    navigation.navigate('ModifyProfile');
+  };
+
   return (
     <View style={styles.block}>
       <View style={styles.circle} />
@@ -40,6 +44,7 @@ function SetupProfile() {
           <CustomButton title="다음" onPress={onSubmit} hasMarginBottom />
           <CustomButton title="취소" onPress={onCancel} theme="secondary" />
         </View>
+        <Button onPress={moveToModifyProfile} />
       </View>
     </View>
   );

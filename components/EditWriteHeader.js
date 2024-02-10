@@ -5,12 +5,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import essaysStorage from '../storages/essaysStorage';
 import {CommonActions} from '@react-navigation/native';
 
-function WriteHeader({onSave}) {
+function EditWriteHeader({onSave, defaultPublic}) {
+  const [isPublic, setIsPublic] = useState(defaultPublic);
   const navigation = useNavigation();
-  const [isPublic, setIsPublic] = useState(true);
+
   const toggleVisibility = () => {
-    setIsPublic(prevIsPublic => !prevIsPublic);
-    console.log('isPublic', isPublic);
+    setIsPublic(!isPublic);
   };
 
   const onGoBack = () => {
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WriteHeader;
+export default EditWriteHeader;

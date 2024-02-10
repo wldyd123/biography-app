@@ -32,8 +32,9 @@ const essaysStorage = {
         title: data.title || '',
         body: data.body || '',
         question: data.question || '',
+        isPublic: data.isPublic,
       };
-
+      //와 *** data.isPullic || true로 쓰면 그냥 무조건 true구나... 바보다 진심.....
       existingEssays.push(newEssay);
 
       //객체를 -> 문자열로 바꾼 뒤 asyncstorage에 저장.
@@ -44,6 +45,49 @@ const essaysStorage = {
       throw new Error('Falied to save Essays');
     }
   },
+  async update(id, newData) {
+    try {
+      const rawEssays = await AsyncStorage.getItem(key);
+      const existingEssays = rawEssays ? JSON.parse(rawEssays) : [];
+
+      const updatedEssays = existingEssays.map(essay => {
+        if (essay.id === id) {
+          return {
+            ...essay,
+            title: newData.title || essay.title,
+            body: newData.body || essay.body,
+            createdAt: new Date(),
+            isPublic: newData.isPublic || essay.isPublic,
+          };
+        }
+        return essay;
+      });
+
+      await AsyncStorage.setItem(key, JSON.stringify(updatedEssays));
+      console.log('Essay updated successfully');
+      console.log('Updated Essays:', updatedEssays);
+    } catch (error) {
+      console.error('Failed to update Essay:', error);
+      throw new Error('Failed to update Essay');
+    }
+  },
+
+  async remove(id) {
+    try {
+      const rawEssays = await AsyncStorage.getItem(key);
+      const existingEssays = rawEssays ? JSON.parse(rawEssays) : [];
+
+      // 해당 id와 일치하는 에세이를 필터링하여 제외한 후 다시 저장
+      const updatedEssays = existingEssays.filter(essay => essay.id !== id);
+
+      await AsyncStorage.setItem(key, JSON.stringify(updatedEssays));
+      console.log('Essay deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete Essay:', error);
+      throw new Error('Failed to delete Essay');
+    }
+  },
+
   async clear() {
     try {
       await AsyncStorage.removeItem(key);
