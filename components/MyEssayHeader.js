@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, View, Text, Button} from 'react-native';
+import {Pressable, StyleSheet, View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function MyEssayHeader({id, title, body, question, onDelete}) {
+function MyEssayHeader({id, title, body, question, onDelete, isPublic}) {
   const navigation = useNavigation();
+
   const onGoBack = () => {
     navigation.pop();
   };
   const onEditPress = () => {
-    navigation.navigate('EditPage', {id, title, body, question});
+    navigation.navigate('EditPage', {id, title, body, question, isPublic});
   };
 
   return (

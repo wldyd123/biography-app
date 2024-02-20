@@ -77,6 +77,8 @@ function ModifyProfileScreen({route, navigation}) {
     try {
       await usersStorage.delete();
       setResponse(null);
+      const profileImage = await usersStorage.getImage();
+      console.log(profileImage);
       console.log('User profileImage deleted successfully');
     } catch (error) {
       console.error('Error deleting user profile:', error);
@@ -139,6 +141,7 @@ function ModifyProfileScreen({route, navigation}) {
               <TextInput
                 defaultValue={initialNickname}
                 onChangeText={onChangeNickname}
+                value={nickname}
               />
             </View>
           </View>
@@ -148,6 +151,7 @@ function ModifyProfileScreen({route, navigation}) {
               <TextInput
                 defaultValue={initialOneliner}
                 onChangeText={onChangeText}
+                value={oneliner}
               />
               <Button title={'프로필설정이동'} onPress={moveToSetupProfile} />
               <Button title={'메인탭이동'} onPress={moveToMainTab} />

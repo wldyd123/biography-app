@@ -1,7 +1,20 @@
 import React from 'react';
-import {SafeAreaView, View, StyleSheet, Text, SectionList} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Button,
+  Text,
+  SectionList,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
+const moveToSetupProfile = () => {
+  const navigation = useNavigation();
+  navigation.navigate('SetUpProfile');
+};
 function ListScreen({navigation}) {
+  <Button title="프로필 설정" onPress={moveToSetupProfile} />;
   let A = [
     {
       번호: '1',

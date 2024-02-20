@@ -25,6 +25,9 @@ function EditPageScreen({route, navigation}) {
   const [isPublic, setIsPublic] = useState(initialIsPublic);
 
   const saveEssay = async publicStatus => {
+    console.log('publicStatus : ', publicStatus);
+    setIsPublic(publicStatus);
+
     try {
       //새로운 Essay 객체 생성.
       const updatedEssay = {
@@ -34,12 +37,19 @@ function EditPageScreen({route, navigation}) {
         createdAt: Date.now(),
         isPublic: publicStatus,
       };
-
+      console.log('isPublic : ', isPublic);
       //그리고 storage에 업데이트된 Essays 저장.
       await essaysStorage.update(id, updatedEssay);
 
       console.log('Essay updated successfully');
-      navigation.navigate('MyEssay', {id: id});
+      navigation.navigate('MoveToMyEssay', {
+        id: id,
+        question: question,
+        title: title,
+        body: body,
+        time: Date.now(),
+        isPublic: isPublic,
+      });
     } catch (error) {
       console.error('Error saving essay:', error);
     }
@@ -51,7 +61,7 @@ function EditPageScreen({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.block}>
-      <EditWriteHeader onSave={saveEssay} defaultPublic={initialIsPublic} />
+      <EditWriteHeader onSave={saveEssay} defaultPublic={isPublic} />
       <SeparatorView />
       <View style={styles.block}>
         {question && <Question ask={question} />}

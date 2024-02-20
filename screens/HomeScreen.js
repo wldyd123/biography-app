@@ -55,12 +55,11 @@ function HomeScreen() {
   }, []);
 
   const handleEssayPress = item => {
-    const clickedEssay = essays.find(essay => essay.id === item.id);
-    navigation.navigate('Essay', {
-      question: clickedEssay.question,
-      title: clickedEssay.title,
-      body: clickedEssay.body,
-      time: clickedEssay.createdAt,
+    navigation.navigate('MoveToEssay', {
+      question: item.question,
+      title: item.title,
+      body: item.body,
+      time: item.createdAt,
       nickname: nickname,
       image: image,
     });

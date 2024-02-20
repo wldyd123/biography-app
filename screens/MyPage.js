@@ -7,9 +7,20 @@ function MyPage({navigation}) {
   const moveToListScreen = () => {
     navigation.navigate('List');
   };
+  const moveToProfileSetupScreen = () => {
+    navigation.navigate('SetupProfile');
+  };
+  const moveToModifyProfileScreen = () => {
+    navigation.navigate('ModifyProfile');
+  };
   return (
     <View style={styles.block}>
       <Button title="Move to ListScreen" onPress={moveToListScreen} />
+      <Button title="Move to SetupProfile" onPress={moveToProfileSetupScreen} />
+      <Button
+        title="Move to ModifyProfile"
+        onPress={moveToModifyProfileScreen}
+      />
       <UserProfile />
       <UserPosts />
     </View>

@@ -26,12 +26,14 @@ function UserPosts() {
   }, []);
 
   const handleMyEssayPress = item => {
-    navigation.navigate('MyEssay', {
+    console.log(item);
+    navigation.navigate('MoveToMyEssay', {
       id: item.id,
       question: item.question,
       title: item.title,
       body: item.body,
       time: item.createdAt,
+      isPublic: item.isPublic,
     });
   };
   const reverseOrder = () => {

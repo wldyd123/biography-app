@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, StyleSheet, Button} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import usersStorage from '../storages/usersStorage';
 import essaysStorage from '../storages/essaysStorage';
 import MyEssayHeader from '../components/MyEssayHeader';
@@ -15,33 +15,16 @@ function Header({image, nickname}) {
   );
 }
 
-function MyEssayScreen() {
-  const [essayTitle, setEssayTitle] = useState('');
-  const [essayBody, setEssayBody] = useState('');
-  const [essayTime, setEssayTime] = useState();
-  const [essayQuestion, setEssayQuestion] = useState('');
+function MoveToMyEssayScreen() {
+  const [essayData, setEssayData] = useState(null);
   const [nickname, setNickname] = useState('');
   const [userImage, setUserImage] = useState();
-  const [id, setId] = useState();
-  const [isPublic, setIsPublic] = useState();
+  const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
-    const getStoredEssay = async () => {
-      try {
-        const storedEssays = await essaysStorage.get();
-        if (storedEssays.length > 0) {
-          const lastEssay = storedEssays[storedEssays.length - 1];
-          setEssayTitle(lastEssay.title);
-          setEssayBody(lastEssay.body);
-          setEssayTime(lastEssay.createdAt);
-          setEssayQuestion(lastEssay.question);
-          setId(lastEssay.id);
-          setIsPublic(lastEssay.isPublic);
-        }
-      } catch (error) {
-        console.error('Error retrieving essay:', error);
-      }
-    };
+    const {id, question, title, body, time, isPublic} = route.params;
+    setEssayData({id, question, title, body, time, isPublic});
 
     const getStoredUser = async () => {
       try {
@@ -59,13 +42,16 @@ function MyEssayScreen() {
         console.error('Error retrieving user:', error);
       }
     };
+    getStoredUser();
+  }, [route.params, navigation]);
 
-    const unsubscribe = navigation.addListener('focus', () => {
-      getStoredEssay();
-      getStoredUser();
-    });
-    return unsubscribe;
-  }, [navigation]);
+  if (!essayData) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   const clearAsyncStorage = async () => {
     try {
@@ -83,8 +69,6 @@ function MyEssayScreen() {
     return `${year}년 ${month}월 ${day}일`;
   };
 
-  const navigation = useNavigation();
-
   const moveToHomeScreen = () => {
     navigation.navigate('Home');
   };
@@ -92,7 +76,6 @@ function MyEssayScreen() {
   const moveToMyPage = () => {
     navigation.navigate('MyPage');
   };
-
   const deleteEssay = async () => {
     try {
       await essaysStorage.remove(id);
@@ -108,22 +91,22 @@ function MyEssayScreen() {
   return (
     <View style={styles.block}>
       <MyEssayHeader
-        id={id}
-        title={essayTitle}
-        body={essayBody}
-        question={essayQuestion}
+        id={essayData.id}
+        title={essayData.title}
+        body={essayData.body}
+        question={essayData.question}
         onDelete={deleteEssay}
-        isPublic={isPublic}
+        isPublic={essayData.isPublic}
       />
       <Button title="Clear AsyncStorage" onPress={clearAsyncStorage} />
       <View style={styles.content}>
         <Header image={userImage} nickname={nickname} />
-        <Text style={styles.question}>{essayQuestion}</Text>
-        <Text style={styles.title}>{essayTitle}</Text>
+        <Text style={styles.question}>{essayData.question}</Text>
+        <Text style={styles.title}>{essayData.title}</Text>
         <View>
-          <Text style={styles.content}>{essayBody}</Text>
+          <Text style={styles.content}>{essayData.body}</Text>
         </View>
-        <Text style={styles.date}>{formatDate(essayTime)}</Text>
+        <Text style={styles.date}>{formatDate(essayData.time)}</Text>
 
         <Button title="Move to HomeScreen" onPress={moveToHomeScreen} />
         <Button title="Move to MyPage" onPress={moveToMyPage} />
@@ -167,4 +150,4 @@ const styles = StyleSheet.create({
   content: {fontSize: 14, paddingHorizontal: 30, paddingBottom: 70},
   date: {paddingLeft: 10},
 });
-export default MyEssayScreen;
+export default MoveToMyEssayScreen;

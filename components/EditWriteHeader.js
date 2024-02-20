@@ -10,7 +10,7 @@ function EditWriteHeader({onSave, defaultPublic}) {
   const navigation = useNavigation();
 
   const toggleVisibility = () => {
-    setIsPublic(!isPublic);
+    setIsPublic(prevIsPublic => !prevIsPublic);
   };
 
   const onGoBack = () => {
@@ -21,7 +21,6 @@ function EditWriteHeader({onSave, defaultPublic}) {
     await onSave(isPublic); //onSave호출하여 essay 저장. + public값을 전달
 
     const storedEssays = await essaysStorage.get(); //글 목록 갱신.
-    navigation.navigate('MyEssay');
 
     const myEssayScreen = navigation
       .getState()

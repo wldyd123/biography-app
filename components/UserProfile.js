@@ -3,7 +3,7 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 import usersStorage from '../storages/usersStorage';
 
 function UserProfile() {
-  const [userImage, setUserImage] = useState(null);
+  const [userImage, setUserImage] = useState('');
   const [oneliner, setOneliner] = useState('');
   const [nickname, setNickname] = useState('');
 

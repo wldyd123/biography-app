@@ -57,7 +57,9 @@ const essaysStorage = {
             title: newData.title || essay.title,
             body: newData.body || essay.body,
             createdAt: new Date(),
-            isPublic: newData.isPublic || essay.isPublic,
+            isPublic: newData.hasOwnProperty('isPublic')
+              ? newData.isPublic
+              : essay.isPublic,
           };
         }
         return essay;
