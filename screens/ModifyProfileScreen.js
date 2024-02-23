@@ -14,6 +14,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {launchImageLibrary} from 'react-native-image-picker';
 import usersStorage from '../storages/usersStorage';
 import BorderedInput from '../components/BorderedInput';
+import updateProfile from '../api/profileApi';
 
 function ModifyProfileScreen({route, navigation}) {
   const {

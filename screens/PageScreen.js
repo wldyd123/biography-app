@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {SafeAreaView, TextInput, StyleSheet, View, Text} from 'react-native';
 import WriteHeader from '../components/WriteHeader';
 import essaysStorage from '../storages/essaysStorage';
+import postEssay from '../api/essayapi';
 
 function Question(props) {
   return (
@@ -31,14 +32,10 @@ function PageScreen({route, navigation}) {
       };
 
       //그리고 storage에 업데이트된 Essays 저장.
-      await essaysStorage.set(newEssay);
+      //await essaysStorage.set(newEssay);
 
+      await postEssay(title, body, publicStatus);
       console.log('Essay saved successfully');
-
-      const storedEssays = await essaysStorage.get();
-      console.log('Stored Essays:', storedEssays);
-
-      setEssays(storedEssays);
     } catch (error) {
       console.error('Error saving essay:', error);
     }

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {SafeAreaView, TextInput, StyleSheet, View, Text} from 'react-native';
 import essaysStorage from '../storages/essaysStorage';
 import EditWriteHeader from '../components/EditWriteHeader';
+import updateEssay from '../api/essayapi';
 
 function Question(props) {
   return (
@@ -30,16 +31,22 @@ function EditPageScreen({route, navigation}) {
 
     try {
       //새로운 Essay 객체 생성.
-      const updatedEssay = {
-        id: id,
-        title: title,
-        body: body,
-        createdAt: Date.now(),
-        isPublic: publicStatus,
-      };
-      console.log('isPublic : ', isPublic);
-      //그리고 storage에 업데이트된 Essays 저장.
-      await essaysStorage.update(id, updatedEssay);
+      // const updatedEssay = {
+      //   id: id,
+      //   title: title,
+      //   body: body,
+      //   createdAt: Date.now(),
+      //   isPublic: publicStatus,
+      // };
+      // console.log('isPublic : ', isPublic);
+      // //그리고 storage에 업데이트된 Essays 저장.
+      // await essaysStorage.update(id, updatedEssay);
+
+      const essayId = id;
+      const updatedTitle = title;
+      const updatedContent = body;
+
+      updateEssay(essayId, updatedTitle, updatedContent);
 
       console.log('Essay updated successfully');
       navigation.navigate('MoveToMyEssay', {
