@@ -72,10 +72,11 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion=33
 
     namespace "com.biographyapp"
     defaultConfig {
+        compileSdkVersion=33
         applicationId "com.biographyapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion

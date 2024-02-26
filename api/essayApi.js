@@ -9,7 +9,7 @@ const postEssay = async (title, content, secret) => {
       secret: secret,
     });
 
-    console.log('게시글이 성공적으로 올라갔습니다:', response.data);
+    console.log('게시글이 성공적으로 올라갔습니다:', response.data); //
     return response.data;
   } catch (error) {
     console.error('게시글을 올리는 도중 오류 발생함:', error);
@@ -24,8 +24,7 @@ const updateEssay = async (id, title, content) => {
   try {
     const response = await axios.put('/api/board/{id}', {
       title: title,
-      content,
-      content,
+      content: content,
     });
     console.log('에세이가 성공적으로 수정되었습니다:', response.data);
     return response.data;

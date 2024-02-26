@@ -17,11 +17,18 @@ import HomeScreen from './HomeScreen';
 import MyPage from './MyPage';
 import EditPageScreen from './EditPageScreen';
 import ModifyProfileScreen from './ModifyProfileScreen';
+import MoveToMyEssayScreen from './MoveToMyEssayScreen';
+import MoveToEssayScreen from './MoveToEssayScreen';
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{headerTitleAlign: 'center'}}
+      />
       <Stack.Screen
         name="List"
         options={{title: '글쓰기'}}
@@ -32,15 +39,27 @@ function RootStack() {
         component={SetupProfileScreen}
         options={{headerTitleAlign: 'center'}}
       />
+
+      <Stack.Screen
+        name="ModifyProfile"
+        component={ModifyProfileScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MoveToEssay"
+        component={MoveToEssayScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MoveToMyEssay"
+        component={MoveToMyEssayScreen}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen name="EditPage" component={EditPageScreen} />
       <Stack.Screen
         name="MyEssay"
         component={MyEssayScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="ModifyProfile"
-        component={ModifyProfileScreen}
         options={{headerShown: false}}
       />
 
@@ -78,11 +97,7 @@ function RootStack() {
         component={WelcomeScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="SignIn"
-        component={SignInScreen}
-        options={{headerTitleAlign: 'center'}}
-      />
+
       <Stack.Screen
         name="MainTab"
         component={MainTab}
