@@ -1,14 +1,19 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Text, Alert, StyleSheet} from 'react-native';
 import BorderedInput from './BorderedInput';
 import CustomButton from './CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import {sendMailAuth} from '../lib/auth';
+import {reqEmailver, checkEmailVer} from '../api/signupApi';
 
 function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
   const navigation = useNavigation();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
+  const [key, setKey] = useState();
+  const onChangeText = inputKey => {
+    setKey(inputKey);
+  };
 
   const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 
@@ -20,6 +25,10 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
     } else if (isSignUp && password !== confirmPassword) {
       Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
     }
+  };
+
+  const resEmailver = email => {
+    const certification_key = reqEmailver(email);
   };
 
   return (
@@ -42,16 +51,19 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
           <CustomButton
             title="인증하기"
             onPress={() => {
-              sendMailAuth(form.email);
+              resEmailver(email);
             }}
           />
           <BorderedInput
             placeholder="인증번호"
-            value={form.authNumber}
+            value={key}
             returnKeyType="done"
-            onChangeText={createChangeTextHandler('authNumber')}
+            onChangeText={onChangeText}
           />
-          <CustomButton title="확인" />
+          <CustomButton
+            title="확인"
+            onPress={() => checkEmailVer(certification_key)}
+          />
         </>
       )}
 

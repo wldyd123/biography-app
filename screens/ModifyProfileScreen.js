@@ -14,7 +14,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {launchImageLibrary} from 'react-native-image-picker';
 import usersStorage from '../storages/usersStorage';
 import BorderedInput from '../components/BorderedInput';
-import updateProfile from '../api/profileApi';
+import {updateProfile} from '../api/profileApi';
 
 function ModifyProfileScreen({route, navigation}) {
   const {
@@ -61,6 +61,7 @@ function ModifyProfileScreen({route, navigation}) {
   const onChangeNickname = text => {
     setNickname(text);
   };
+
   const changeUserProfile = async () => {
     try {
       const newUser = {
@@ -74,6 +75,7 @@ function ModifyProfileScreen({route, navigation}) {
       console.error('Error updating user profile:', error);
     }
   };
+
   const deleteImage = async () => {
     try {
       await usersStorage.delete();
@@ -93,6 +95,7 @@ function ModifyProfileScreen({route, navigation}) {
       </View>
     );
   };
+
   return (
     <KeyboardAwareScrollView>
       <View style={styles.block}>

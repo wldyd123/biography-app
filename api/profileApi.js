@@ -1,35 +1,108 @@
 import axios from 'axios';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
-const createProfile = async (nickname, introduce, profilePicture) => {
+const baseUrl = '';
+
+export const createProfile = async (nickname, introduce, profilePicture) => {
+  let accessToken = await EncryptedStorage.getItem('accessToken');
+
   try {
-    const response = await axios.post('/api/profile', {
-      nickname: nickname,
-      introduce: introduce,
-      profilePicture: profilePicture,
-    });
+    const response = await axios.post(
+      `${baseUrl}/api/profile`,
+      {
+        nickname: nickname,
+        introduce: introduce,
+        profilePicture: profilePicture,
+      },
+      {headers: {Authorization: `Bearer ${accessToken}`}},
+    );
 
     console.log('프로필이 성공적으로 저장되었습니다 : ', response.data);
     return response.data;
   } catch (error) {
-    console.error('게시글을 올리는 도중 오류 발생함:', error);
-    throw error;
+    if (error.response && error.response.status == 401) {
+      try {
+        const refreshToken = await EncryptedStorage.getItem('refreshToken');
+        const refreshResponse = await axios.post(`${baseUrl}/auth/renew`, {
+          refreshToken: refreshToken,
+        });
+        accessToken = refreshResponse.data.accessToken;
+        //다시 재요청 보내기
+        await EncryptedStorage.setItem('accessToken', accessToken);
+        const response = await axios.post(
+          `${baseUrl}/api/profile`,
+          {
+            nickname: nickname,
+            introduce: introduce,
+            profilePicture: profilePicture,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+
+        console.log('프로필이 성공적으로 저장되었습니다. ', response.data);
+      } catch (refreshError) {
+        console.error('액세스 토큰 갱신 중 에러 발생 : ', refreshError);
+        throw refreshError;
+      }
+    } else {
+      console.error('게시글을 올리는 도중 오류 발생함:', error);
+      throw error;
+    }
   }
 };
 
-const updateProfile = async (nickname, introduce, profilePicture) => {
+export const updateProfile = async (nickname, introduce, profilePicture) => {
   try {
-    const response = await axios.put('/api/profile', {
-      nickname: nickname,
-      introduce: introduce,
-      profilePicture: profilePicture,
-    });
+    let accessToken = await EncryptedStorage.getItem('accessToken');
+
+    const response = await axios.put(
+      `${baseUrl}/api/profile`,
+      {
+        nickname: nickname,
+        introduce: introduce,
+        profilePicture: profilePicture,
+      },
+      {headers: {Authorization: `Bearer ${accessToken}`}},
+    );
 
     console.log('프로필이 성공적으로 수정되었습니다: ', response.date);
     return response.data;
   } catch (error) {
-    console.error('게시글을 수정하는 도중 오류 발생함: ', error);
-    throw error;
+    if (error.response && error.response.status == 401) {
+      try {
+        const refreshToken = await EncryptedStorage.getItem('refreshToken');
+        const refreshResponse = await axios.put(`${baseUrl}/auth/renew`, {
+          refreshToken: refreshToken,
+        });
+        accessToken = refreshResponse.data.accessToken;
+        //다시 재요청 보내기
+        await EncryptedStorage.setItem('accessToken', accessToken);
+        const response = await axios.put(
+          `${baseUrl}/api/profile`,
+          {
+            nickname: nickname,
+            introduce: introduce,
+            profilePicture: profilePicture,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+
+        console.log('프로필이 성공적으로 저장되었습니다. ', response.data);
+      } catch (refreshError) {
+        console.error('액세스 토큰 갱신 중 에러 발생 : ', refreshError);
+        throw refreshError;
+      }
+    } else {
+      console.error('게시글을 올리는 도중 오류 발생함:', error);
+      throw error;
+    }
   }
 };
-
-export default profileApi;

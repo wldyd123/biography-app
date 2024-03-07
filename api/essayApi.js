@@ -1,9 +1,12 @@
 import axios from 'axios';
 
 //글 작성하기
+
+const baseUrl = '';
+
 const postEssay = async (title, content, secret) => {
   try {
-    const response = await axios.post('/api/board/saveForm', {
+    const response = await axios.post(`{baseURl}/api/board/saveForm`, {
       title: title,
       content: content,
       secret: secret,
@@ -55,4 +58,3 @@ const deleteEssay = async id => {
 
 // const essayId = 'your-essay-id'; // 삭제할 에세이의 ID
 // deleteEssay(essayId);
-export default essayApi;

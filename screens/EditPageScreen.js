@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {SafeAreaView, TextInput, StyleSheet, View, Text} from 'react-native';
 import essaysStorage from '../storages/essaysStorage';
 import EditWriteHeader from '../components/EditWriteHeader';
-import updateEssay from '../api/essayapi';
+import updateEssay from '../api/essayApi';
 
 function Question(props) {
   return (

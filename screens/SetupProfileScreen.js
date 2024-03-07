@@ -15,7 +15,7 @@ import BorderedInput from '../components/BorderedInput';
 import CustomButton from '../components/CustomButton';
 import {launchImageLibrary} from 'react-native-image-picker';
 import usersStorage from '../storages/usersStorage';
-import createProfile from '../api/profileApi';
+import {createProfile} from '../api/profileApi';
 
 function SetupProfileScreen({navigation, route}) {
   const [oneliner, setOneliner] = useState('');
@@ -63,7 +63,7 @@ function SetupProfileScreen({navigation, route}) {
       await usersStorage.set(newUser);
       console.log('User profile saved successfully');
 
-      createProfile(nickname, oneliner, profileImage);
+      await createProfile(nickname, oneliner, profileImage);
       navigation.push('ModifyProfile', {
         oneliner,
         profileImage,
