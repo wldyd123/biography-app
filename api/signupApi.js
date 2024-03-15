@@ -1,12 +1,12 @@
 import axios from 'axios';
 //회원가입 api
-const baseUrl = '';
+const baseUrl = 'https://autobiography-9d461.web.app';
 //`${baseUrl}/auth/email`
 
 export const reqEmailver = async email => {
   try {
     const response = await axios.post(
-      'https://us-central1-autobiography-9d461.cloudfunctions.net/sendMail',
+      `${baseUrl}/auth/email`,
       JSON.stringify({email: email}),
       {
         headers: {
@@ -36,7 +36,7 @@ export const checkEmailver = async (certificationkey, certificationcode) => {
   try {
     console.log('넘어온 값 : ', certificationkey, certificationcode);
     const response = await axios.post(
-      'https://us-central1-autobiography-9d461.cloudfunctions.net/checkMail',
+      `${baseUrl}/auth/email/validation`,
       JSON.stringify({
         certification_key: certificationkey,
         certification_code: certificationcode,
@@ -60,7 +60,7 @@ export const checkEmailver = async (certificationkey, certificationcode) => {
 
 export const normalsignUp = async (email, password, name, tel, birth) => {
   try {
-    const response = await axios.post('${baseUrl}/auth/sign-up', {
+    const response = await axios.post(`${baseUrl}/auth/sign-up`, {
       email: email,
       password: password,
       name: name,

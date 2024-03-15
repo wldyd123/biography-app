@@ -18,15 +18,16 @@ import {reqEmailver, checkEmailver} from '../api/signupApi';
 function SignUpScreen({navigation}) {
   const [text, setText] = useState('');
   const [number, setNumber] = useState('');
+  const [certification, setCertification] = useState('');
 
-  let certification = '';
+
   const handleEmailVerification = async () => {
     try {
       const certificationKey = await reqEmailver(text);
       // reqEmailver 함수에서 반환된 인증 키(certification key)를 사용할 수 있습니다.
       console.log('text:', text);
       console.log('인증 키:', certificationKey);
-      certification = certificationKey;
+      setCertification(certificationKey);
       console.log('certification:', certification);
     } catch (error) {
       console.log('text:', text);
@@ -40,12 +41,10 @@ function SignUpScreen({navigation}) {
   };
 
   const handleEmailVerCheck = async () => {
-    const certification_key = certification; // 인증 키 값 설정
-    // 인증 코드 값 설정
 
     try {
-      console.log(certification_key);
-      const is_validated = await checkEmailver(certification_key, number);
+      console.log('certification:', certification);
+      const is_validated = await checkEmailver(certification, number);
 
       // is_validated 값에 따라 다른 동작 수행 가능
       if (is_validated === 0) {
