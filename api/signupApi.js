@@ -58,7 +58,7 @@ export const checkEmailver = async (certificationkey, certificationcode) => {
   }
 };
 
-export const normalsignUp = async (email, password, name, tel, birth) => {
+export const normalsignUp = async (email, password, name, tel, birth, nickname) => {
   try {
     const response = await axios.post(`${baseUrl}/auth/sign-up`, {
       email: email,
@@ -66,6 +66,7 @@ export const normalsignUp = async (email, password, name, tel, birth) => {
       name: name,
       tel: tel,
       birth: birth,
+      nickname: nickname,
     });
 
     const success = response.data.success;

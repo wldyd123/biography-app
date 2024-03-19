@@ -16,9 +16,11 @@ import {reqEmailver, checkEmailver} from '../api/signupApi';
 //회원가입 화면
 
 function SignUpScreen({navigation}) {
-  const [text, setText] = useState('');
-  const [number, setNumber] = useState('');
+  const [text, setText] = useState('');  //이메일
+  const [number, setNumber] = useState(''); //인증번호
+  const [password, setPassword] = useState(''); //비밀번호
   const [certification, setCertification] = useState('');
+  
 
 
   const handleEmailVerification = async () => {
@@ -36,8 +38,8 @@ function SignUpScreen({navigation}) {
   };
 
   const moveToRegiInfo = () => {
-    console.log('text:', text, 'number:', number);
-    navigation.navigate('RegisterInfo', {text, number});
+    console.log('text:', text, 'password:', password);
+    navigation.navigate('RegisterInfo', {text, password});
   };
 
   const handleEmailVerCheck = async () => {
@@ -77,7 +79,7 @@ function SignUpScreen({navigation}) {
           style={styles.inputStyle}
         />
         <Button title="확인" onPress={handleEmailVerCheck} />
-        <TextInput placeholder="비밀번호 입력" style={styles.inputStyle} />
+        <TextInput placeholder="비밀번호 입력" value={password} onChangeText={value => setPassword(value)} style={styles.inputStyle} />
         <TextInput placeholder="비밀번호 재입력" style={styles.inputStyle} />
         <Button title="다음" onPress={moveToRegiInfo} />
       </View>

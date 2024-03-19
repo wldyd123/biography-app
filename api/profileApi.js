@@ -1,5 +1,6 @@
 import axios from 'axios';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import { JumpingTransition } from 'react-native-reanimated';
 
 const baseUrl = '';
 
@@ -31,11 +32,11 @@ export const createProfile = async (nickname, introduce, profilePicture) => {
         await EncryptedStorage.setItem('accessToken', accessToken);
         const response = await axios.post(
           `${baseUrl}/api/profile`,
-          {
+          JSON.stringify({
             nickname: nickname,
             introduce: introduce,
             profilePicture: profilePicture,
-          },
+          }),
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
