@@ -2,7 +2,7 @@ import {React, useState} from 'react';
 import {Button, TextInput, StyleSheet, View} from 'react-native';
 import {signIn} from '../api/signinApi';
 
-function SignInScreen() {
+function SignInScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState();
 
@@ -10,9 +10,8 @@ function SignInScreen() {
     try {
       console.log('email, password : ', email, password);
       const response = await signIn(email, password);
-
-      //이렇게 작성하면 response로 {success, access_token, refresh_token} 이렇게 return받음.
-      //response.success 이런식으로 사용가능함.
+      navigation.navigate('Home');
+      
     } catch (error) {
       console.error('일반 로그인 요청 실패 : ', error);
     }

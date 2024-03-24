@@ -11,8 +11,8 @@ export const signIn = async (email, password) => {
     });
 
     const success = response.data.success;
-    const access_token = response.data.access_token;
-    const refresh_token = response.data.refresh_token;
+    const access_token = response.data.accessToken;
+    const refresh_token = response.data.refreshToken;
 
     console.log(
       'success',
